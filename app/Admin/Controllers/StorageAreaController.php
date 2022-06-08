@@ -3,6 +3,8 @@
 namespace App\Admin\Controllers;
 
 use App\Models\StorageArea;
+use App\Utility\TimeUtility;
+use DateTime;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -29,8 +31,12 @@ class StorageAreaController extends AdminController
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
         $grid->column('status', __('Status'))->bool();
-        $grid->column('created_at', __('Created at'))->datetime();
-        $grid->column('updated_at', __('Updated at'))->datetime();
+        $grid->column('created_at', __('Created at'))->display(function($create) {
+            return TimeUtility::toDisplyTime($create);
+        });
+        $grid->column('updated_at', __('Updated at'))->display(function ($update) {
+           return TimeUtility::toDisplyTime($update);
+        });
 
         return $grid;
     }
@@ -48,8 +54,8 @@ class StorageAreaController extends AdminController
         $show->field('id', __('Id'));
         $show->field('name', __('Name'));
         $show->field('status', __('Status'));
-//        $show->field('created_at', __('Created at'))->datetime();
-//        $show->field('updated_at', __('Updated at'))->datetime();
+        $show->field('created_at', __('Created at'));
+        $show->field('updated_at', __('Updated at'));
 
         return $show;
     }
