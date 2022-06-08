@@ -32,19 +32,29 @@ class ElectronicController extends AdminController
     {
         $grid = new Grid(new eletronic());
 
-        $grid->column('id', __('Id'));
-        $grid->column('name', __('Name'));
-        $grid->column('count', __('Count'));
-        $grid->StorageArea(__('store location'))->display(function ($storages){
+        $grid
+            ->column('id', __('Id'));
+        $grid
+            ->column('name', __('Name'));
+        $grid
+            ->column('count', __('Count'));
+        $grid
+            ->column('tags', __('flowTag'))
+            ->label();
+        $grid
+            ->StorageArea(__('store location'))->display(function ($storages){
             $returnData = array_map(function ($storage) {
                 return $storage['name'];
             }, $storages);
             return $returnData;
-        })->label();
-        $grid->column('created_at', __('Created at'))->display(function ($create){
+        })
+            ->label();
+        $grid
+            ->column('created_at', __('Created at'))->display(function ($create){
             return TimeUtility::toDisplyTime($create);
         });
-        $grid->column('updated_at', __('Updated at'))->display(function ($update){
+        $grid
+            ->column('updated_at', __('Updated at'))->display(function ($update){
             return TimeUtility::toDisplyTime($update);
         });
 
@@ -79,10 +89,19 @@ class ElectronicController extends AdminController
     {
         $form = new Form(new eletronic());
 
-        $form->text('name', __('Name'));
+        $form
+            ->text('name', __('Name'))
+            ->required();
         $form
             ->multipleSelect('StorageArea', __('store location'))
-            ->options(StorageArea::where('status', 1)->pluck('name', 'id'));
+            ->options(StorageArea::where('status', 1)->pluck('name', 'id'))
+            ->required();
+        $form
+            ->textarea('description', __('description'))
+            ->required();
+        $form
+            ->tags('tags', __('flowTag'))
+            ->required();
 
         return $form;
     }

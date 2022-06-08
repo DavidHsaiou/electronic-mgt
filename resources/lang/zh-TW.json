@@ -7,5 +7,7 @@
     "Count": "數量",
     "storage_area": "存放區管理",
     "electronic": "料表管理",
-    "store location": "存放區域"
+    "store location": "存放區域",
+    "description": "說明",
+    "flowTag": "工作狀態"
 }

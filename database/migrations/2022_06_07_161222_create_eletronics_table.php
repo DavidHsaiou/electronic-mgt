@@ -18,6 +18,8 @@ class CreateEletronicsTable extends Migration
             $table->id();
             $table->string('name', 128);
             $table->integer('count')->default(0);
+            $table->string('description', 512);
+            $table->string('tags', 256);
             $table->timestamps();
         });
     }
