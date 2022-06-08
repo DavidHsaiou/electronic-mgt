@@ -35,7 +35,7 @@ class ElectronicController extends AdminController
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
         $grid->column('count', __('Count'));
-        $grid->StorageArea()->display(function ($storages){
+        $grid->StorageArea(__('store location'))->display(function ($storages){
             $returnData = array_map(function ($storage) {
                 return $storage['name'];
             }, $storages);
