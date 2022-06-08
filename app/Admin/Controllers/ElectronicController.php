@@ -3,6 +3,8 @@
 namespace App\Admin\Controllers;
 
 use App\Models\eletronic;
+use App\Models\StorageArea;
+use App\Utility\TimeUtility;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -15,7 +17,11 @@ class ElectronicController extends AdminController
      *
      * @var string
      */
-    protected $title = 'eletronic';
+    protected $title = 'electronic';
+
+    function __construct() {
+        $this->title = __($this->title);
+    }
 
     /**
      * Make a grid builder.
@@ -29,8 +35,18 @@ class ElectronicController extends AdminController
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
         $grid->column('count', __('Count'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->StorageArea()->display(function ($storages){
+            $returnData = array_map(function ($storage) {
+                return $storage['name'];
+            }, $storages);
+            return $returnData;
+        })->label();
+        $grid->column('created_at', __('Created at'))->display(function ($create){
+            return TimeUtility::toDisplyTime($create);
+        });
+        $grid->column('updated_at', __('Updated at'))->display(function ($update){
+            return TimeUtility::toDisplyTime($update);
+        });
 
         return $grid;
     }
@@ -64,7 +80,9 @@ class ElectronicController extends AdminController
         $form = new Form(new eletronic());
 
         $form->text('name', __('Name'));
-        $form->number('count', __('Count'));
+        $form
+            ->multipleSelect('StorageArea', __('store location'))
+            ->options(StorageArea::where('status', 1)->pluck('name', 'id'));
 
         return $form;
     }

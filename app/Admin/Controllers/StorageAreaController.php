@@ -17,7 +17,11 @@ class StorageAreaController extends AdminController
      *
      * @var string
      */
-    protected $title = '存放區管理';
+    protected $title = 'storage_area';
+
+    function __construct() {
+        $this->title = __($this->title);
+    }
 
     /**
      * Make a grid builder.

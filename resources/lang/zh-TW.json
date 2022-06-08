@@ -3,5 +3,9 @@
     "Name": "名稱",
     "Status": "狀態",
     "Created at": "創建時間",
-    "Updated at": "更新時間"
+    "Updated at": "更新時間",
+    "Count": "數量",
+    "storage_area": "存放區管理",
+    "electronic": "料表管理",
+    "store location": "存放區域"
 }

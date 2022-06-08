@@ -12,8 +12,10 @@ class eletronic extends Model
 
     protected $fillable = ['name'];
 
+    protected $guarded = ['count'];
+
     public function StorageArea(): BelongsToMany
     {
-        return $this->belongsToMany(StorageArea::class);
+        return $this->belongsToMany(StorageArea::class, 'electronic_storage_areas', 'electronic_id', 'storage_id');
     }
 }

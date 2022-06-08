@@ -14,6 +14,6 @@ class StorageArea extends Model
 
     public function Electronic(): BelongsToMany
     {
-        return $this->belongsToMany(eletronic::class);
+        return $this->belongsToMany(eletronic::class, 'electronic_storage_areas', 'storage_id', 'electronic_id');
     }
 }
