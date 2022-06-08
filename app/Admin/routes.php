@@ -1,5 +1,6 @@
 <?php
 
+use Encore\Admin\Admin;
 use Illuminate\Routing\Router;
 
 Admin::routes();
@@ -12,5 +13,5 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index')->name('home');
-
+    $router->resource('storage-areas', StorageAreaController::class);
 });
