@@ -19,5 +19,11 @@ class MenuSeeder extends Seeder
             'uri' => '/storage-areas',
             'icon' => 'fa-tasks'
         ]);
+
+        DB::table('admin_menu')->insert([
+            'title' => '料表管理',
+            'uri' => '/eletronics',
+            'icon' => 'fa-tasks'
+        ]);
     }
 }
