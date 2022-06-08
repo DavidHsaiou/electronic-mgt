@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class eletronic extends Model
 {
@@ -12,8 +12,8 @@ class eletronic extends Model
 
     protected $fillable = ['name'];
 
-    public function StorageArea(): HasMany
+    public function StorageArea(): BelongsToMany
     {
-        return $this->hasMany(StorageArea::class);
+        return $this->belongsToMany(StorageArea::class);
     }
 }

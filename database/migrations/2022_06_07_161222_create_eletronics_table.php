@@ -17,8 +17,7 @@ class CreateEletronicsTable extends Migration
         Schema::create('eletronics', function (Blueprint $table) {
             $table->id();
             $table->string('name', 128);
-//            $table->
-            $table->integer('count');
+            $table->integer('count')->default(0);
             $table->timestamps();
         });
     }
