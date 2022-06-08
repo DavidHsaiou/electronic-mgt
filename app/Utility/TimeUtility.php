@@ -3,6 +3,7 @@
 namespace App\Utility;
 
 use DateTime;
+use DateTimeZone;
 
 class TimeUtility {
     public static function toDisplyTime($datetime) {
@@ -13,6 +14,7 @@ class TimeUtility {
             $checkTime = $datetime;
         }
 
+        $checkTime->setTimezone(new DateTimeZone(config('app.timezone')));
         return $checkTime->format('Y-m-d H:m:s');
     }
 }
