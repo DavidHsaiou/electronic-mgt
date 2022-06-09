@@ -25,7 +25,7 @@ class CreateEletronicsTable extends Migration
             $table->integer('pricing')->nullable();
             $table->text('tax_rule')->default('')->nullable();
             $table->string('bill_name', 128)->default('')->nullable();
-            $table->text('memo')->default('');
+            $table->text('memo')->default('')->nullable();
             $table->string('options', 256)->default('')->nullable();
             $table->timestamps();
         });
