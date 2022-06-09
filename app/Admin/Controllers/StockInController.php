@@ -31,21 +31,39 @@ class StockInController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new StockInRecord());
-        $totalPrice = 0;
-        $grid->column('id', __('Id'))->expand(function ($model) use(&$totalPrice){
+        $grid->column('id', __('Id'))->expand(function ($model){
             $details = $model->details()
                 ->get()
-                ->map(function ($detail) use(&$totalPrice) {
+                ->map(function ($detail){
                     $detail->singlePrice = $detail->original_price * $detail->mainRecord()->first()->price_coefficient;
                     $detail->totalPrice = $detail->singlePrice * $detail->count;
-                    $totalPrice += $detail->totalPrice;
                     $detail->electronic_name = $detail->useElectronic()->first()->name;
-                    return $detail->only(['electronic_name', 'original_price', 'singlePrice', 'count', 'totalPrice']);
+                    return $detail->only([
+                        'electronic_name',
+                        'original_price',
+                        'singlePrice',
+                        'count',
+                        'totalPrice']);
                 });
-            return new Table([__('electronic_name'), __('original_price'), __('singlePrice'), __('Count'), __('totalPrice')], $details->toArray());
+            return new Table([
+                __('electronic_name'),
+                __('original_price'),
+                __('singlePrice'),
+                __('Count'),
+                __('totalPrice')],
+                $details->toArray());
         });
         $grid->column('price_coefficient', __('price_coefficient'));
-        $grid->column('totalPrice',__('totalPrice'));
+//        $price_coefficient = $grid->model()->get()->first()->price_coefficient;
+        $grid->column('details',__('totalPrice'))->display(function ($details) use(&$price_coefficient) {
+            $eachPrice = 0;
+            $price_coefficient = 0;
+            $main = StockInRecord::find($details[0]['record_id']);
+            foreach($details as $detail) {
+                $eachPrice += $detail['original_price'] * $main->price_coefficient * $detail['count'];
+            }
+            return $eachPrice;
+        });
         $grid->column('created_at', __('Created at'))->display(function ($time){
             return TimeUtility::toDisplyTime($time);
         });
