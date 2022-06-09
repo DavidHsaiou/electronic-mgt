@@ -22,6 +22,6 @@
     "original_price": "原價",
     "singlePrice": "係數單價",
     "totalPrice": "係數總價",
-    "StockInRecordDetail": "入庫明細"
-
+    "StockInRecordDetail": "入庫明細",
+    "StockInRecord": "入庫紀錄"
 }
