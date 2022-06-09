@@ -9,5 +9,8 @@
     "electronic": "料表管理",
     "store location": "存放區域",
     "description": "說明",
-    "flowTag": "工作狀態"
+    "flowTag": "工作狀態",
+    "upload_image": "上傳圖片",
+    "essential_name": "關鍵字",
+    "pricing": "定價"
 }
