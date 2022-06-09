@@ -56,6 +56,9 @@
             "@php artisan migrate",
             "@php artisan admin:install",
             "@php artisan db:seed"
+        ],
+        "run-dev-server": [
+            "@php artisan serve --host=0.0.0.0:8000"
         ]
     },
     "extra": {
