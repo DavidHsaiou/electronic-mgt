@@ -15,4 +15,5 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('home');
     $router->resource('storage-areas', StorageAreaController::class);
     $router->resource('eletronics', ElectronicController::class);
+    $router->resource('stock-in-records', StockInController::class);
 });

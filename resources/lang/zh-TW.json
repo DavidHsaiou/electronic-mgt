@@ -16,5 +16,12 @@
     "tax_rule": "稅則",
     "bill_name": "發票名稱",
     "memo": "備註",
-    "options": "選項"
+    "options": "選項",
+    "price_coefficient": "金額係數",
+    "electronic_name": "料名",
+    "original_price": "原價",
+    "singlePrice": "係數單價",
+    "totalPrice": "係數總價",
+    "StockInRecordDetail": "入庫明細"
+
 }

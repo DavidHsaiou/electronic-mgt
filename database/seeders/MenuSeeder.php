@@ -25,5 +25,10 @@ class MenuSeeder extends Seeder
             'uri' => '/eletronics',
             'icon' => 'fa-tasks'
         ]);
+        DB::table('admin_menu')->insert([
+            'title' => '入庫管理',
+            'uri' => '/stock-in-records',
+            'icon' => 'fa-tasks'
+        ]);
     }
 }

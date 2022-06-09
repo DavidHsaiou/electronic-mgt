@@ -54,6 +54,9 @@
         "migrate-rollback": [
             "@php artisan migrate:rollback"
         ],
+        "migrate": [
+            "@php artisan migrate"
+        ],
         "run-fresh-install": [
             "@php artisan migrate",
             "@php artisan admin:install",

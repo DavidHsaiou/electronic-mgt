@@ -16,6 +16,9 @@ class CreateElectronicStorageAreasTable extends Migration
         Schema::create('electronic_storage_areas', function (Blueprint $table) {
             $table->bigInteger('electronic_id')->unsigned();
             $table->bigInteger('storage_id')->unsigned();
+            $table->timestamps();
+
+            // index
             $table
                 ->foreign('electronic_id')
                 ->references('id')
@@ -26,7 +29,6 @@ class CreateElectronicStorageAreasTable extends Migration
                 ->references('id')
                 ->on('storage_areas')
                 ->onDelete('cascade');
-            $table->timestamps();
         });
     }
 
