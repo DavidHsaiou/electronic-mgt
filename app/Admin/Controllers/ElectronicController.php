@@ -32,6 +32,15 @@ class ElectronicController extends AdminController
     {
         $grid = new Grid(new eletronic());
 
+        $grid->filter(function ($filter) {
+            $filter->disableIdFilter();
+            $filter->column(1/2, function ($filter) {
+                $filter->like('name', __('Name'));
+                $filter->like('description', __('description'));
+                $filter->like('tags', __('flowTag'));
+            });
+        });
+
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
         $grid->column('count', __('Count'));
