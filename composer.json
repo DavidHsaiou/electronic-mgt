@@ -57,8 +57,11 @@
             "@php artisan admin:install",
             "@php artisan db:seed"
         ],
-        "run-dev-server": [
+        "dev-server": [
             "@php artisan serve --host=0.0.0.0:8000"
+        ],
+        "bg-dev-server":[
+            "nohup @php artisan serve --host=0.0.0.0:8000 &"
         ]
     },
     "extra": {
