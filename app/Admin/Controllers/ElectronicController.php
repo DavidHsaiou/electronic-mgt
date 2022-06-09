@@ -104,7 +104,7 @@ class ElectronicController extends AdminController
         $form->tags('tags', __('flowTag'))
             ->required();
         $form->text('essential_name', __('essential_name'));
-        $form->image('image_path', 'upload_image');
+        $form->image('image_path', __('upload_image'));
         $form->number('pricing', __('pricing'));
         $form->text('tax_rule', __('tax_rule'));
         $form->text('bill_name', __('bill_name'));

@@ -12,5 +12,9 @@
     "flowTag": "工作狀態",
     "upload_image": "上傳圖片",
     "essential_name": "關鍵字",
-    "pricing": "定價"
+    "pricing": "定價",
+    "tax_rule": "稅則",
+    "bill_name": "發票名稱",
+    "memo": "備註",
+    "options": "選項"
 }
