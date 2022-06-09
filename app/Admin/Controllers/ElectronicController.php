@@ -32,29 +32,25 @@ class ElectronicController extends AdminController
     {
         $grid = new Grid(new eletronic());
 
-        $grid
-            ->column('id', __('Id'));
-        $grid
-            ->column('name', __('Name'));
-        $grid
-            ->column('count', __('Count'));
-        $grid
-            ->column('tags', __('flowTag'))
+        $grid->column('id', __('Id'));
+        $grid->column('name', __('Name'));
+        $grid->column('count', __('Count'));
+        $grid->column('tags', __('flowTag'))
             ->label();
-        $grid
-            ->StorageArea(__('store location'))->display(function ($storages){
+        $grid->StorageArea(__('store location'))->display(function ($storages){
             $returnData = array_map(function ($storage) {
                 return $storage['name'];
             }, $storages);
             return $returnData;
-        })
-            ->label();
-        $grid
-            ->column('created_at', __('Created at'))->display(function ($create){
+        })->label();
+        $grid->column('description', __('description'));
+        $grid->column('image_path', __('upload_image'))->image();
+        $grid->column('essential_name', __('essential_name'));
+        $grid->column('pricing', __('pricing'));
+        $grid->column('created_at', __('Created at'))->display(function ($create){
             return TimeUtility::toDisplyTime($create);
         });
-        $grid
-            ->column('updated_at', __('Updated at'))->display(function ($update){
+        $grid->column('updated_at', __('Updated at'))->display(function ($update){
             return TimeUtility::toDisplyTime($update);
         });
 
@@ -89,19 +85,22 @@ class ElectronicController extends AdminController
     {
         $form = new Form(new eletronic());
 
-        $form
-            ->text('name', __('Name'))
+        $form->text('name', __('Name'))
             ->required();
-        $form
-            ->multipleSelect('StorageArea', __('store location'))
+        $form->multipleSelect('StorageArea', __('store location'))
             ->options(StorageArea::where('status', 1)->pluck('name', 'id'))
             ->required();
-        $form
-            ->textarea('description', __('description'))
+        $form->textarea('description', __('description'))
             ->required();
-        $form
-            ->tags('tags', __('flowTag'))
+        $form->tags('tags', __('flowTag'))
             ->required();
+        $form->text('essential_name', __('essential_name'));
+        $form->image('image_path', 'upload_image');
+        $form->number('pricing', __('pricing'));
+        $form->text('tax_rule', __('tax_rule'));
+        $form->text('bill_name', __('bill_name'));
+        $form->textarea('memo', __('memo'));
+        $form->text('options', __('options'));
 
         return $form;
     }

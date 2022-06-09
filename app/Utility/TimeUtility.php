@@ -14,6 +14,7 @@ class TimeUtility {
             $checkTime = $datetime;
         }
 
+        if ($checkTime == null) return null;
         $checkTime->setTimezone(new DateTimeZone(config('app.timezone')));
         return $checkTime->format('Y-m-d H:i:s');
     }

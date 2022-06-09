@@ -20,6 +20,13 @@ class CreateEletronicsTable extends Migration
             $table->integer('count')->default(0);
             $table->string('description', 512);
             $table->string('tags', 256);
+            $table->string('essential_name', 128)->default('')->nullable();
+            $table->string('image_path', 256)->default('')->nullable();
+            $table->integer('pricing')->nullable();
+            $table->text('tax_rule')->default('')->nullable();
+            $table->string('bill_name', 128)->default('')->nullable();
+            $table->text('memo')->default('');
+            $table->string('options', 256)->default('')->nullable();
             $table->timestamps();
         });
     }
