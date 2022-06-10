@@ -57,7 +57,7 @@
         "migrate": [
             "@php artisan migrate"
         ],
-        "run-fresh-install": [
+        "install": [
             "@php artisan migrate",
             "@php artisan admin:install",
             "@php artisan db:seed"

@@ -43,6 +43,7 @@ class ElectronicController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
+        $grid->column('options', __('options'));
         $grid->column('count', __('Count'));
         $grid->column('tags', __('flowTag'))
             ->label();

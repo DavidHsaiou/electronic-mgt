@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\eletronic;
 use App\Models\StockInRecord;
 use App\Utility\TimeUtility;
 use Encore\Admin\Controllers\AdminController;
@@ -9,6 +10,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
+use App\Admin\Selector\ElectronicSelector;
 
 class StockInController extends AdminController
 {
@@ -31,6 +33,10 @@ class StockInController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new StockInRecord());
+        $grid->filter(function ($filter) {
+            $filter->disableIdFilter();
+        });
+
         $grid->column('id', __('Id'))->expand(function ($model){
             $details = $model->details()
                 ->get()
@@ -105,13 +111,14 @@ class StockInController extends AdminController
     {
         $form = new Form(new StockInRecord());
 
-        $form->decimal('price_coefficient', __('price_coefficient'));
+        $form->decimal('price_coefficient', __('price_coefficient'))->required();
 
         $form->hasMany('details', __('StockInRecordDetail'), function (Form\NestedForm $form) {
 //            $form->text('record_id');
-            $form->text('electric_id');
-            $form->decimal('original_price', __('original_price'));
-            $form->number('count', __('Count'));
+            $form->select('electric_id', __('electronic_name'))
+                ->options(eletronic::all()->pluck('name', 'id'))->required();
+            $form->decimal('original_price', __('original_price'))->required();
+            $form->number('count', __('Count'))->required();
         });
 
         return $form;
