@@ -121,24 +121,24 @@ class StockInController extends AdminController
             $form->number('count', __('Count'))->required();
         });
 
-//        $form->saving(function(Form $form) {
-//            $details = $form->model()->details()->get();
-//            Log::notice('datas', [dump($form->details), $details]);
-//            // when not enough count popup
-//            // old record and not in new record, minus all
-//            // new record and not exist in old record, just add
-//            // old and new record exist, compare count and add/minus count
-//        });
-//
-//        if ($form->isCreating()) {
-//            $form->saved(function (Form $form) {
-//                $details = $form->model()->details()->get();
-//                foreach ($details as $detail) {
-//                    $electronic = $detail->useElectronic();
-//                    $electronic->increment('count', $detail->count);
-//                }
-//            });
-//        }
+        $form->saving(function(Form $form) {
+            $details = $form->model()->details()->get();
+            Log::notice('datas', [dump($form->details), $details]);
+            // when not enough count popup
+            // old record and not in new record, minus all
+            // new record and not exist in old record, just add
+            // old and new record exist, compare count and add/minus count
+        });
+
+        if ($form->isCreating()) {
+            $form->saved(function (Form $form) {
+                $details = $form->model()->details()->get();
+                foreach ($details as $detail) {
+                    $electronic = $detail->useElectronic();
+                    $electronic->increment('count', $detail->count);
+                }
+            });
+        }
 
         return $form;
     }
