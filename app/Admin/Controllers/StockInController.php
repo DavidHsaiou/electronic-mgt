@@ -118,17 +118,32 @@ class StockInController extends AdminController
             $form->select('electric_id', __('electronic_name'))
                 ->options(eletronic::all()->pluck('name', 'id'))->required();
             $form->decimal('original_price', __('original_price'))->required();
-            $form->number('count', __('Count'))->required();
+            $form->number('count', __('Count'))->rules(['required','gt:0'], [
+                'gt' => [
+                    'numeric' =>
+                        ':attribute 必須大於 :value.'
+                ]
+            ]);
         });
 
-        $form->saving(function(Form $form) {
-            $details = $form->model()->details()->get();
-            Log::notice('datas', [dump($form->details), $details]);
-            // when not enough count popup
-            // old record and not in new record, minus all
-            // new record and not exist in old record, just add
-            // old and new record exist, compare count and add/minus count
-        });
+        if ($form->isEditing()) {
+            $form->saving(function (Form $form) {
+                Log::notice('edit started');
+//                $oldDetails = $form->model()->details()->get();
+//                $newDetails = array_map(function ($detail) {
+//                    return $detail;
+//                },$form->details);
+//                Log::notice('datas', [$newDetails]);
+//                // when not enough count popup
+//                // old record and not in new record, minus all
+//                foreach ($oldDetails as $oldDetail) {
+//
+//                }
+//                // new record and not exist in old record, just add
+////                foreach ($)
+//                // old and new record exist, compare count and add/minus count
+            });
+        }
 
         if ($form->isCreating()) {
             $form->saved(function (Form $form) {
