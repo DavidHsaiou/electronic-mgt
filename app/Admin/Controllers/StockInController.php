@@ -41,6 +41,12 @@ class StockInController extends AdminController
             $filter->disableIdFilter();
         });
 
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+            $actions->disableView();
+        });
+
+
         $grid->model()->orderBy('id', 'desc');
 
         $grid->column('id', __('Id'))->expand(function ($model){
@@ -116,6 +122,11 @@ class StockInController extends AdminController
     protected function form()
     {
         $form = new Form(new StockInRecord());
+        $form->tools(function (Form\Tools $tools) {
+            $tools->disableDelete();
+            $tools->disableView();
+        });
+
         $form->decimal('price_coefficient', __('price_coefficient'))->required();
 
         $form->hasMany('details', __('StockInRecordDetail'), function (Form\NestedForm $form) {
