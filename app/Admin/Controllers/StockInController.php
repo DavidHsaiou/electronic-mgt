@@ -11,6 +11,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
 use App\Admin\Selector\ElectronicSelector;
+use Illuminate\Support\Facades\Log;
 
 class StockInController extends AdminController
 {
@@ -60,7 +61,6 @@ class StockInController extends AdminController
                 $details->toArray());
         });
         $grid->column('price_coefficient', __('price_coefficient'));
-//        $price_coefficient = $grid->model()->get()->first()->price_coefficient;
         $grid->column('details',__('totalPrice'))->display(function ($details) use(&$price_coefficient) {
             $eachPrice = 0;
             $price_coefficient = 0;
@@ -114,11 +114,19 @@ class StockInController extends AdminController
         $form->decimal('price_coefficient', __('price_coefficient'))->required();
 
         $form->hasMany('details', __('StockInRecordDetail'), function (Form\NestedForm $form) {
-//            $form->text('record_id');
             $form->select('electric_id', __('electronic_name'))
                 ->options(eletronic::all()->pluck('name', 'id'))->required();
             $form->decimal('original_price', __('original_price'))->required();
             $form->number('count', __('Count'))->required();
+        });
+
+        $form->saved(function (Form $form) {
+            $details = $form->model()->details()->get();
+            Log::notice($details);
+            foreach ($details as $detail) {
+                $electronic = $detail->useElectronic();
+                $electronic->increment('count', $detail->count);
+            }
         });
 
         return $form;
