@@ -148,7 +148,7 @@ class StockInController extends AdminController
                         $electronic = eletronic::find($newDetail["electric_id"]);
                         $oldDetail = StockInRecordDetail::find($newDetail['id']);
                         $nowCount = $electronic->count;
-                        $oldRecordCount = $oldDetail->count;
+                        $oldRecordCount = $oldDetail? $oldDetail->count: 0;
                         $newRecordCount = $newDetail['count'];
                         // remove data, minus all
                         if ($newDetail['_remove_'] == 1) {
