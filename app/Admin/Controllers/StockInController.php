@@ -130,14 +130,15 @@ class StockInController extends AdminController
             // old and new record exist, compare count and add/minus count
         });
 
-        $form->saved(function (Form $form) {
-            $details = $form->model()->details()->get();
-            Log::notice($details);
-            foreach ($details as $detail) {
-                $electronic = $detail->useElectronic();
-                $electronic->increment('count', $detail->count);
-            }
-        });
+        if ($form->isCreating()) {
+            $form->saved(function (Form $form) {
+                $details = $form->model()->details()->get();
+                foreach ($details as $detail) {
+                    $electronic = $detail->useElectronic();
+                    $electronic->increment('count', $detail->count);
+                }
+            });
+        }
 
         return $form;
     }
