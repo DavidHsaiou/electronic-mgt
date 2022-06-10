@@ -38,6 +38,8 @@ class StockInController extends AdminController
             $filter->disableIdFilter();
         });
 
+        $grid->model()->orderBy('id', 'desc');
+
         $grid->column('id', __('Id'))->expand(function ($model){
             $details = $model->details()
                 ->get()
@@ -110,7 +112,6 @@ class StockInController extends AdminController
     protected function form()
     {
         $form = new Form(new StockInRecord());
-
         $form->decimal('price_coefficient', __('price_coefficient'))->required();
 
         $form->hasMany('details', __('StockInRecordDetail'), function (Form\NestedForm $form) {
@@ -118,6 +119,15 @@ class StockInController extends AdminController
                 ->options(eletronic::all()->pluck('name', 'id'))->required();
             $form->decimal('original_price', __('original_price'))->required();
             $form->number('count', __('Count'))->required();
+        });
+
+        $form->saving(function(Form $form) {
+            $details = $form->model()->details()->get();
+            Log::notice('datas', [dump($form->details), $details]);
+            // when not enough count popup
+            // old record and not in new record, minus all
+            // new record and not exist in old record, just add
+            // old and new record exist, compare count and add/minus count
         });
 
         $form->saved(function (Form $form) {
