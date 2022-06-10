@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\eletronic;
 use App\Models\StockInRecord;
+use App\Models\StockInRecordDetail;
 use App\Utility\TimeUtility;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -11,6 +12,8 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
 use App\Admin\Selector\ElectronicSelector;
+use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class StockInController extends AdminController
@@ -66,6 +69,7 @@ class StockInController extends AdminController
         $grid->column('details',__('totalPrice'))->display(function ($details) use(&$price_coefficient) {
             $eachPrice = 0;
             $price_coefficient = 0;
+            if (count($details) == 0) return 0;
             $main = StockInRecord::find($details[0]['record_id']);
             foreach($details as $detail) {
                 $eachPrice += $detail['original_price'] * $main->price_coefficient * $detail['count'];
@@ -125,19 +129,39 @@ class StockInController extends AdminController
         if ($form->isEditing()) {
             $form->saving(function (Form $form) {
                 Log::notice('edit started');
-//                $oldDetails = $form->model()->details()->get();
-//                $newDetails = array_map(function ($detail) {
-//                    return $detail;
-//                },$form->details);
-//                Log::notice('datas', [$newDetails]);
-//                // when not enough count popup
-//                // old record and not in new record, minus all
-//                foreach ($oldDetails as $oldDetail) {
-//
-//                }
-//                // new record and not exist in old record, just add
-////                foreach ($)
-//                // old and new record exist, compare count and add/minus count
+                $newDetails = $form->details;
+                // when not enough count popup
+                DB::transaction(function () use(&$newDetails) {
+                    foreach ($newDetails as $newDetail) {
+                        Log::notice($newDetail);
+                        $electronic = eletronic::find($newDetail["electric_id"]);
+                        $oldDetail = StockInRecordDetail::find($newDetail['id']);
+                        $nowCount = $electronic->count;
+                        $oldRecordCount = $oldDetail->count;
+                        $newRecordCount = $newDetail['count'];
+                        // remove data, minus all
+                        if ($newDetail['_remove_'] == 1) {
+                            if ($oldRecordCount > $nowCount) {
+                                throw new Exception('現有數量小於移除數量');
+                            }
+                            $electronic->decrement('count', $oldRecordCount);
+                        } else if ($newDetail['id'] == null) {
+                            // newData, just add
+                            $electronic->increment('count', $newRecordCount);
+                        } else {
+                            // edit, compare count and add/minus count
+                            $diffCount = $newRecordCount - $oldRecordCount;
+                            if ($diffCount > 0) {
+                                $electronic->increment('count', $diffCount);
+                            } else if ($diffCount < 0) {
+                                if (abs($diffCount) > $nowCount) {
+                                    throw new Exception('現有數量小於移除數量');
+                                }
+                                $electronic->decrement('count', abs($diffCount));
+                            }
+                        }
+                    }
+                });
             });
         }
 
