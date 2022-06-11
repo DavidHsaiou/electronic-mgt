@@ -97,11 +97,13 @@ class ElectronicController extends AdminController
 
         $form->text('name', __('Name'))
             ->required();
+        $form->text('options', __('options'));
+        $form->textarea('description', __('description'))
+            ->required();
         $form->multipleSelect('StorageArea', __('store location'))
             ->options(StorageArea::where('status', 1)->pluck('name', 'id'))
             ->required();
-        $form->textarea('description', __('description'))
-            ->required();
+
         $form->tags('tags', __('flowTag'))
             ->required();
         $form->text('essential_name', __('essential_name'));
@@ -110,7 +112,6 @@ class ElectronicController extends AdminController
         $form->text('tax_rule', __('tax_rule'));
         $form->text('bill_name', __('bill_name'));
         $form->textarea('memo', __('memo'));
-        $form->text('options', __('options'));
 
         return $form;
     }

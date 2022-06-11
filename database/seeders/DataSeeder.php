@@ -13,5 +13,15 @@ class DataSeeder extends Seeder {
                 'name' => '未分類',
                 'status' => 1
             ]);
+        DB::table('bill_types')
+            ->insert([
+                'name' => '二聯式發票',
+                'status' => 1
+            ]);
+        DB::table('bill_types')
+            ->insert([
+                'name' => '三聯式發票',
+                'status' => 1
+            ]);
     }
 }

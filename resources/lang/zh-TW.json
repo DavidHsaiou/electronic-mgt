@@ -1,7 +1,9 @@
 {
     "Id": "系統編號",
     "Name": "名稱",
+    "name": "名稱",
     "Status": "狀態",
+    "status": "狀態",
     "Created at": "創建時間",
     "Updated at": "更新時間",
     "Count": "數量",
@@ -23,5 +25,6 @@
     "singlePrice": "係數單價",
     "totalPrice": "係數總價",
     "StockInRecordDetail": "入庫明細",
-    "StockInRecord": "入庫紀錄"
+    "StockInRecord": "入庫紀錄",
+    "billType ": "發票類型"
 }

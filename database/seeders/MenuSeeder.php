@@ -29,5 +29,10 @@ class MenuSeeder extends Seeder
             'uri' => '/storage-areas',
             'icon' => 'fa-tasks'
         ]);
+        DB::table('admin_menu')->insert([
+            'title' => '發票類型',
+            'uri' => '/bill-types',
+            'icon' => 'fa-tasks'
+        ]);
     }
 }

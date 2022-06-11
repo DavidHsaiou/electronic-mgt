@@ -16,4 +16,5 @@ Route::group([
     $router->resource('storage-areas', StorageAreaController::class);
     $router->resource('eletronics', ElectronicController::class);
     $router->resource('stock-in-records', StockInController::class);
+    $router->resource('bill-types', BillTypeController::class);
 });
