@@ -29,7 +29,7 @@ class AddUsedCountToStockIn extends Migration
     public function down()
     {
         Schema::table('stock_in_record_details', function (Blueprint $table) {
-            $table->dropColumn('usedCount');
+            $table->dropColumn('used_count');
             $table->dropColumn('status');
 
         });

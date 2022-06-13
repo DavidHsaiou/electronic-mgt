@@ -48,5 +48,7 @@
     "shippingType": "物流類型",
     "StockOutRecord": "出庫管理",
     "StockOutRecordDetail": "出庫明細",
-    "profit": "利潤"
+    "profit": "利潤",
+    "ElectronicType": "料表類型",
+    "Sort": "排序"
 }

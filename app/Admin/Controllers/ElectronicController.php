@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\ElectronicType;
 use App\Models\eletronic;
 use App\Models\StockInRecordDetail;
 use App\Models\StorageArea;
@@ -51,10 +52,16 @@ class ElectronicController extends AdminController
             });
         });
 
+        $grid->model()
+            ->select('eletronics.*')
+            ->join('electronic_types as et', 'et.id', '=', 'eletronics.electronic_type')
+            ->orderBy('et.sort');
+
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
         $grid->column('options', __('options'));
         $grid->column('count', __('Count'));
+        $grid->column('ElectronicType.name', __('ElectronicType'));
         $grid->WorkState(__('flowTag'))
             ->display(function ($workState) {
                 $returnData = array_map(function ($workState) {
@@ -140,6 +147,11 @@ class ElectronicController extends AdminController
             ->required();
         $form->text('options', __('options'));
         $form->textarea('description', __('description'))
+            ->required();
+        $form->select('electronic_type', __('ElectronicType'))
+            ->options(ElectronicType::where('status', 1)
+                ->orderBy('sort')
+                ->pluck('name', 'id'))
             ->required();
         $form->multipleSelect('StorageArea', __('store location'))
             ->options(DB::table('storage_areas', 'sa')

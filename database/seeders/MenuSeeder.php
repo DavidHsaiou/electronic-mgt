@@ -60,5 +60,10 @@ class MenuSeeder extends Seeder
             'uri' => '/work-states',
             'icon' => 'fa-tasks'
         ]);
+        DB::table('admin_menu')->insert([
+            'title' => '料表類型',
+            'uri' => '/electronic-types',
+            'icon' => 'fa-tasks'
+        ]);
     }
 }

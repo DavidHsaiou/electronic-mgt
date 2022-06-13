@@ -22,4 +22,5 @@ Route::group([
     $router->resource('shipping-types', ShippingTypeController::class);
     $router->resource('stock-out-records', StockOutRecordController::class);
     $router->resource('work-states', WorkStateController::class);
+    $router->resource('electronic-types', ElectronicTypeController::class);
 });

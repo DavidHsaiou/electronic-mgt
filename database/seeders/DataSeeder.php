@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ElectronicType;
 use App\Models\SellChannel;
 use App\Models\ShippingType;
 use App\Models\StockOutType;
@@ -42,6 +43,16 @@ class DataSeeder extends Seeder {
         WorkState::create([
             'name' => '未分類',
             'status' => 1
+        ]);
+        ElectronicType::create([
+            'name' => '電容',
+            'status' => 1,
+            "sort" => 0,
+        ]);
+        ElectronicType::create([
+            'name' => '電阻',
+            'status' => 1,
+            "sort" => 1
         ]);
     }
 }
