@@ -13,6 +13,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Widgets\Table;
 use Illuminate\Support\Facades\Log;
 
 class StockOutRecordController extends AdminController
@@ -36,7 +37,26 @@ class StockOutRecordController extends AdminController
     {
         $grid = new Grid(new StockOutRecord());
 
-        $grid->column('id', __('Id'));
+        $grid->column('id', __('Id'))->expand(function ($model){
+            $details = $model->Details()
+                ->get()
+                ->map(function ($detail){
+                    $detail->singlePrice = $detail->single_price;
+                    $detail->totalPrice = $detail->single_price * $detail->count;
+                    $detail->electronic_name = $detail->useElectronic()->first()->name;
+                    return $detail->only([
+                        'electronic_name',
+                        'single_price',
+                        'count',
+                        'totalPrice']);
+                });
+            return new Table([
+                __('electronic_name'),
+                __('single_price'),
+                __('count'),
+                __('total_price')],
+                $details->toArray());
+        });
         $grid->column('order_number', __('Order number'));
         $grid->column('ShippingType.name', __('Shipping type'));
         $grid->column('BillType.name', __('Bill type'));
