@@ -10,6 +10,7 @@ use App\Models\StockInRecordDetail;
 use App\Models\StockOutRecord;
 use App\Models\StockOutRecordDetail;
 use App\Models\StockOutType;
+use App\Utility\NumberUtility;
 use App\Utility\TimeUtility;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -144,10 +145,18 @@ class StockOutRecordController extends AdminController
         $grid->column('order_date_time', __('Order date time'));
         $grid->column('shipping_date_time', __('Shipping date time'));
         $grid->column('address', __('Address'));
-        $grid->column('real_amount', __('Real amount'));
-        $grid->column('buyer_amount', __('Buyer amount'));
-        $grid->column('delivery_charge', __('Delivery charge'));
-        $grid->column('discount_amount', __('Discount amount'));
+        $grid->column('real_amount', __('Real amount'))->display(function ($real_amount) {
+            return NumberUtility::toDisplyFloat($real_amount);
+        });
+        $grid->column('buyer_amount', __('Buyer amount'))->display(function ($real_amount) {
+            return NumberUtility::toDisplyFloat($real_amount);
+        });
+        $grid->column('delivery_charge', __('Delivery charge'))->display(function ($real_amount) {
+            return NumberUtility::toDisplyFloat($real_amount);
+        });
+        $grid->column('discount_amount', __('Discount amount'))->display(function ($real_amount) {
+            return NumberUtility::toDisplyFloat($real_amount);
+        });
         $grid->column('memo', __('Memo'));
         $grid->column('created_at', __('Created at'))->display(function ($time){
             return TimeUtility::toDisplyTime($time);

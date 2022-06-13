@@ -6,6 +6,7 @@ use App\Models\eletronic;
 use App\Models\StockInRecordDetail;
 use App\Models\StorageArea;
 use App\Models\WorkState;
+use App\Utility\NumberUtility;
 use App\Utility\TimeUtility;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -34,6 +35,11 @@ class ElectronicController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new eletronic());
+
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+            $actions->disableView();
+        });
 
         $grid->filter(function ($filter) {
             $filter->disableIdFilter();
@@ -85,7 +91,7 @@ class ElectronicController extends AdminController
                 $totalCount += $remainCount;
                 $totalPrice += $remainCount * $remainRecord->original_price * $price_coefficient;
             }
-            return ($price / ($totalPrice / $totalCount) * 100).'%';
+            return NumberUtility::toDisplyFloat(($price / ($totalPrice / $totalCount) * 100)).'%';
         });
         $grid->column('created_at', __('Created at'))->display(function ($create){
             return TimeUtility::toDisplyTime($create);
@@ -124,6 +130,10 @@ class ElectronicController extends AdminController
     protected function form()
     {
         $form = new Form(new eletronic());
+
+        $form->tools(function (Form\Tools $tools) {
+            $tools->disableView();
+        });
 
         $form->text('name', __('Name'))
             ->required();
