@@ -14,6 +14,8 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
+use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class StockOutRecordController extends AdminController
@@ -152,6 +154,24 @@ class StockOutRecordController extends AdminController
             });
             $form->textarea('memo', __('Memo'));
         });
+
+        if ($form->isCreating()) {
+            $form->saving(function (Form $form) {
+                $newDetails = $form->Details;
+                DB::transaction(function () use (&$newDetails) {
+                    foreach ($newDetails as $newDetail) {
+                        $electronic = eletronic::find($newDetail["electric_id"]);
+                        $nowCount = $electronic->count;
+                        $useCount = $newDetail['count'];
+                        if ($useCount > $nowCount) {
+                            throw new Exception("{$electronic->name}現有數量小於使用數量");
+                        }
+                        $electronic->decrement('count', $useCount);
+                    }
+                });
+            });
+        }
+
         return $form;
     }
 }

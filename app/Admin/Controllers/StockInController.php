@@ -153,7 +153,7 @@ class StockInController extends AdminController
                         // remove data, minus all
                         if ($newDetail['_remove_'] == 1) {
                             if ($oldRecordCount > $nowCount) {
-                                throw new Exception('現有數量小於移除數量');
+                                throw new Exception("{$electronic->name}現有數量小於移除數量");
                             }
                             $electronic->decrement('count', $oldRecordCount);
                         } else if ($newDetail['id'] == null) {
@@ -166,7 +166,7 @@ class StockInController extends AdminController
                                 $electronic->increment('count', $diffCount);
                             } else if ($diffCount < 0) {
                                 if (abs($diffCount) > $nowCount) {
-                                    throw new Exception('現有數量小於移除數量');
+                                    throw new Exception("{$electronic->name}現有數量小於移除數量");
                                 }
                                 $electronic->decrement('count', abs($diffCount));
                             }
