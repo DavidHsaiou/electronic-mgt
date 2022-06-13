@@ -36,6 +36,6 @@ class CreateEletronicsWorkStatesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('work_states');
+        Schema::dropIfExists('eletronics_work_states');
     }
 }
