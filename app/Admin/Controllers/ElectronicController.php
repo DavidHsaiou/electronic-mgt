@@ -16,6 +16,9 @@ use Encore\Admin\Show;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * @property $input
+ */
 class ElectronicController extends AdminController
 {
     /**
@@ -48,7 +51,11 @@ class ElectronicController extends AdminController
             $filter->column(1/2, function ($filter) {
                 $filter->like('name', __('Name'));
                 $filter->like('description', __('description'));
-//                $filter->like('WorkState', __('flowTag'));
+                $filter->where(function ($query) {
+                    $query->whereHas('WorkState', function ($query) {
+                        $query->where('id', "$this->input");
+                    });
+                }, __('flowTag'))->select(WorkState::where('status', 1)->get()->pluck('name', 'id'));
             });
         });
 
