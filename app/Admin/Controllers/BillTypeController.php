@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\billType;
+use App\Models\BillType;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -28,7 +28,7 @@ class BillTypeController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new billType());
+        $grid = new Grid(new BillType());
 
         $grid->column('name', __('name'));
         $grid->column('status', __('status'))->bool();
@@ -44,7 +44,7 @@ class BillTypeController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(billType::findOrFail($id));
+        $show = new Show(BillType::findOrFail($id));
 
 
 
@@ -58,7 +58,7 @@ class BillTypeController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new billType());
+        $form = new Form(new BillType());
 
         $form->text('name', __('Name'));
         $form->switch('status', __('Status'));

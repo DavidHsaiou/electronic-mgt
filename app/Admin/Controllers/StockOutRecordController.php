@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\billType;
+use App\Models\BillType;
 use App\Models\eletronic;
 use App\Models\SellChannel;
 use App\Models\shippingType;
@@ -134,7 +134,7 @@ class StockOutRecordController extends AdminController
         $form->column(1/2, function ($form) {
             $form->text('order_number', __('Order number'))->required();
             $form->select('bill_type', __('Bill type'))
-                ->options(billType::where('status', 1)->get()->pluck('name', 'id'))
+                ->options(BillType::where('status', 1)->get()->pluck('name', 'id'))
                 ->required();
             $form->select('stock_out_type', __('Stock out type'))
                 ->options(StockOutType::where('status', 1)->get()->pluck('name', 'id'))
