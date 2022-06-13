@@ -7,6 +7,7 @@ use App\Models\eletronic;
 use App\Models\SellChannel;
 use App\Models\shippingType;
 use App\Models\StockOutRecord;
+use App\Models\StockOutRecordDetail;
 use App\Models\StockOutType;
 use App\Utility\TimeUtility;
 use Encore\Admin\Controllers\AdminController;
@@ -38,6 +39,14 @@ class StockOutRecordController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new StockOutRecord());
+        $grid->filter(function ($filter) {
+            $filter->disableIdFilter();
+        });
+
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+            $actions->disableView();
+        });
 
         $grid->column('id', __('Id'))->expand(function ($model){
             $details = $model->Details()
@@ -121,27 +130,40 @@ class StockOutRecordController extends AdminController
     {
         $form = new Form(new StockOutRecord());
 
+
         $form->column(1/2, function ($form) {
-            $form->text('order_number', __('Order number'));
+            $form->text('order_number', __('Order number'))->required();
             $form->select('bill_type', __('Bill type'))
-                ->options(billType::where('status', 1)->get()->pluck('name', 'id'));
+                ->options(billType::where('status', 1)->get()->pluck('name', 'id'))
+                ->required();
             $form->select('stock_out_type', __('Stock out type'))
-                ->options(StockOutType::where('status', 1)->get()->pluck('name', 'id'));
+                ->options(StockOutType::where('status', 1)->get()->pluck('name', 'id'))
+                ->required();
             $form->select('sell_channel_type', __('Sell channel type'))
-                ->options(SellChannel::where('status', 1)->get()->pluck('name', 'id'));
+                ->options(SellChannel::where('status', 1)->get()->pluck('name', 'id'))
+                ->required();
             $form->select('shipping_type', __('Shipping type'))
-                ->options(shippingType::where('status', 1)->get()->pluck('name', 'id'));
+                ->options(shippingType::where('status', 1)->get()->pluck('name', 'id'))
+                ->required();
             $form->text('address', __('Address'));
 
         });
 
-        $form->column(1/2 , function ($form) {
-            $form->datetime('order_date_time', __('Order date time'))->default(date('Y-m-d H:i:s'));
-            $form->datetime('shipping_date_time', __('Shipping date time'))->default(date('Y-m-d H:i:s'));
-            $form->decimal('real_amount', __('Real amount'));
-            $form->decimal('buyer_amount', __('Buyer amount'));
-            $form->decimal('delivery_charge', __('Delivery charge'));
-            $form->decimal('discount_amount', __('Discount amount'));
+        $form->column(6 , function ($form) {
+            $form->datetime('order_date_time', __('Order date time'))
+                ->default(date('Y-m-d H:i:s'))
+                ->required();
+            $form->datetime('shipping_date_time', __('Shipping date time'))
+                ->default(date('Y-m-d H:i:s'))
+                ->required();
+            $form->decimal('real_amount', __('Real amount'))
+                ->rules(['required', 'gte:0']);
+            $form->decimal('buyer_amount', __('Buyer amount'))
+                ->rules(['required', 'gte:0']);
+            $form->decimal('delivery_charge', __('Delivery charge'))
+                ->rules(['required', 'gte:0']);
+            $form->decimal('discount_amount', __('Discount amount'))
+                ->rules(['required', 'gte:0']);
         });
 
         $form->column(13 , function ($form) {
@@ -154,6 +176,43 @@ class StockOutRecordController extends AdminController
             });
             $form->textarea('memo', __('Memo'));
         });
+
+        if ($form->isEditing()) {
+            $form->saving(function (Form $form) {
+                $newDetails = $form->Details;
+                // when not enough count popup
+                DB::transaction(function () use(&$newDetails) {
+                    foreach ($newDetails as $newDetail) {
+                        $electronic = eletronic::find($newDetail["electric_id"]);
+                        $oldDetail = StockOutRecordDetail::find($newDetail['id']);
+                        $nowCount = $electronic->count;
+                        $oldRecordCount = $oldDetail? $oldDetail->count: 0;
+                        $newRecordCount = $newDetail['count'];
+                        // remove data, add all
+                        if ($newDetail['_remove_'] == 1) {
+                            $electronic->increment('count', $oldRecordCount);
+                        } else if ($newDetail['id'] == null) {
+                            // newData, check count and minus
+                            if ($newRecordCount > $nowCount) {
+                                throw new Exception("{$electronic->name}現有數量小於使用數量");
+                            }
+                            $electronic->decrement('count', $newRecordCount);
+                        } else {
+                            // edit, compare count and add/minus count
+                            $diffCount = $newRecordCount - $oldRecordCount;
+                            if ($diffCount > 0) {
+                                if ($diffCount > $nowCount) {
+                                    throw new Exception("{$electronic->name}現有數量小於使用數量");
+                                }
+                                $electronic->decrement('count', $diffCount);
+                            } else if ($diffCount < 0) {
+                                $electronic->increment('count', abs($diffCount));
+                            }
+                        }
+                    }
+                });
+            });
+        }
 
         if ($form->isCreating()) {
             $form->saving(function (Form $form) {

@@ -27,7 +27,7 @@ class CreateStockOutRecordsTable extends Migration
             $table->decimal('buyer_amount', 19, 6);
             $table->decimal('delivery_charge', 19, 6);
             $table->decimal('discount_amount', 19, 6);
-            $table->text('memo');
+            $table->text('memo')->default('')->nullable();
             $table->timestamps();
 
             // foreign
