@@ -12,6 +12,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ElectronicController extends AdminController
@@ -141,10 +142,17 @@ class ElectronicController extends AdminController
         $form->textarea('description', __('description'))
             ->required();
         $form->multipleSelect('StorageArea', __('store location'))
-            ->options(StorageArea::where('status', 1)->pluck('name', 'id'))
+            ->options(DB::table('storage_areas', 'sa')
+                ->leftJoin('electronic_storage_areas as e_sa', 'e_sa.storage_id','=', 'sa.id')
+                ->where('sa.status', '=', '1')
+                ->groupBy('sa.id', 'e_sa.storage_id', 'sa.name')
+                ->select(DB::raw("IF(e_sa.storage_id is null, concat(sa.name, '(空的)'), sa.name) as name"), 'id')
+                ->get()
+                ->pluck('name', 'id'))
             ->required();
         $form->multipleSelect('WorkState', __('flowTag'))
-            ->options(WorkState::where('status', 1)->pluck('name', 'id'))
+            ->options(WorkState::where('status', 1)
+            ->pluck('name', 'id'))
             ->required();
         $form->text('essential_name', __('essential_name'));
         $form->image('image_path', __('upload_image'));

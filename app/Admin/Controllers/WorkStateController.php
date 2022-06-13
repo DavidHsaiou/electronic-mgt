@@ -29,7 +29,7 @@ class WorkStateController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
-        $grid->column('status', __('Status'));
+        $grid->column('status', __('Status'))->bool();
         $grid->column('created_at', __('Created at'))->display(function ($time){
             return TimeUtility::toDisplyTime($time);
         });
