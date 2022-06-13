@@ -108,6 +108,9 @@ class StockOutRecordController extends AdminController
         $grid = new Grid(new StockOutRecord());
         $grid->filter(function ($filter) {
             $filter->disableIdFilter();
+            $filter->column(1/2, function ($filter) {
+                $filter->startsWith('order_number', __('Order number'));
+            });
         });
 
         $grid->actions(function ($actions) {

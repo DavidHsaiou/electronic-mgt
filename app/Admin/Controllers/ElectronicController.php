@@ -46,7 +46,7 @@ class ElectronicController extends AdminController
             $filter->column(1/2, function ($filter) {
                 $filter->like('name', __('Name'));
                 $filter->like('description', __('description'));
-                $filter->like('tags', __('flowTag'));
+//                $filter->like('WorkState', __('flowTag'));
             });
         });
 
