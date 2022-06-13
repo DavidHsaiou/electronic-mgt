@@ -18,4 +18,9 @@ class eletronic extends Model
     {
         return $this->belongsToMany(StorageArea::class, 'electronic_storage_areas', 'electronic_id', 'storage_id');
     }
+
+    public function WorkState(): BelongsToMany
+    {
+        return $this->belongsToMany(WorkState::class, 'eletronics_work_states', 'electronic_id', 'work_state_id');
+    }
 }

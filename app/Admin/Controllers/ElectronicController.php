@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\eletronic;
 use App\Models\StorageArea;
+use App\Models\WorkState;
 use App\Utility\TimeUtility;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -45,9 +46,15 @@ class ElectronicController extends AdminController
         $grid->column('name', __('Name'));
         $grid->column('options', __('options'));
         $grid->column('count', __('Count'));
-        $grid->column('tags', __('flowTag'))
-            ->label();
-        $grid->StorageArea(__('store location'))->display(function ($storages){
+        $grid->WorkState(__('flowTag'))
+            ->display(function ($workState) {
+                $returnData = array_map(function ($workState) {
+                    return $workState['name'];
+                }, $workState);
+                return $returnData;
+            })->label();
+        $grid->StorageArea(__('store location'))
+            ->display(function ($storages){
             $returnData = array_map(function ($storage) {
                 return $storage['name'];
             }, $storages);
@@ -103,8 +110,8 @@ class ElectronicController extends AdminController
         $form->multipleSelect('StorageArea', __('store location'))
             ->options(StorageArea::where('status', 1)->pluck('name', 'id'))
             ->required();
-
-        $form->tags('tags', __('flowTag'))
+        $form->multipleSelect('WorkState', __('flowTag'))
+            ->options(WorkState::where('status', 1)->pluck('name', 'id'))
             ->required();
         $form->text('essential_name', __('essential_name'));
         $form->image('image_path', __('upload_image'));

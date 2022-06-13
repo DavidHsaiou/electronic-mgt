@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\SellChannel;
 use App\Models\shippingType;
 use App\Models\StockOutType;
+use App\Models\WorkState;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -37,6 +38,10 @@ class DataSeeder extends Seeder {
         ShippingType::create([
             'name' => '到貨便',
             'status' => 1,
+        ]);
+        WorkState::create([
+            'name' => '未分類',
+            'status' => 1
         ]);
     }
 }

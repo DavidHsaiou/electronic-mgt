@@ -21,4 +21,5 @@ Route::group([
     $router->resource('sell-channels', SellChannelController::class);
     $router->resource('shipping-types', ShippingTypeController::class);
     $router->resource('stock-out-records', StockOutRecordController::class);
+    $router->resource('work-states', WorkStateController::class);
 });
