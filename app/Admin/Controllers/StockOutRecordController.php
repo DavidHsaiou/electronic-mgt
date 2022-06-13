@@ -2,8 +2,11 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\billType;
+use App\Models\SellChannel;
 use App\Models\shippingType;
 use App\Models\StockOutRecord;
+use App\Models\StockOutType;
 use App\Utility\TimeUtility;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -98,9 +101,12 @@ class StockOutRecordController extends AdminController
         $form->text('order_number', __('Order number'));
         $form->select('shipping_type', __('Shipping type'))
             ->options(shippingType::where('status', 1)->get()->pluck('name', 'id'));
-        $form->number('bill_type', __('Bill type'));
-        $form->number('stock_out_type', __('Stock out type'));
-        $form->number('sell_channel_type', __('Sell channel type'));
+        $form->select('bill_type', __('Bill type'))
+            ->options(billType::where('status', 1)->get()->pluck('name', 'id'));
+        $form->select('stock_out_type', __('Stock out type'))
+            ->options(StockOutType::where('status', 1)->get()->pluck('name', 'id'));
+        $form->select('sell_channel_type', __('Sell channel type'))
+            ->options(SellChannel::where('status', 1)->get()->pluck('name', 'id'));
         $form->datetime('order_date_time', __('Order date time'))->default(date('Y-m-d H:i:s'));
         $form->datetime('shipping_date_time', __('Shipping date time'))->default(date('Y-m-d H:i:s'));
         $form->text('address', __('Address'));

@@ -42,5 +42,6 @@
     "Memo": "備註",
     "StockOutType": "出庫類型",
     "SellChannel": "通路類型",
-    "shippingType": "物流類型"
+    "shippingType": "物流類型",
+    "StockOutRecord": "出庫管理"
 }

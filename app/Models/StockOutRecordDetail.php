@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class StockOutRecordDetail extends Model
 {
     use HasFactory;
+
+    public function mainRecord() {
+        return $this->belongsTo(StockOutRecord::class, 'record_id');
+    }
+
+    public function useElectronic() {
+        return $this->belongsTo(eletronic::class, 'electric_id');
+    }
 }

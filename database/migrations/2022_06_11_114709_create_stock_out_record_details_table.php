@@ -15,7 +15,20 @@ class CreateStockOutRecordDetailsTable extends Migration
     {
         Schema::create('stock_out_record_details', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('record_id')->unsigned();
+            $table->biginteger('electric_id')->unsigned();
+            $table->decimal('single_price', 19, 6);
+            $table->integer('count')->unsigned();
             $table->timestamps();
+
+            $table->foreign('record_id')
+                ->references('id')
+                ->on('stock_out_records')
+                ->onDelete('cascade');
+            $table->foreign('electric_id')
+                ->references('id')
+                ->on('eletronics')
+                ->onDelete('cascade');
         });
     }
 
