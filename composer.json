@@ -63,6 +63,10 @@
             "@php artisan db:seed",
             "@php artisan admin:import log-viewer"
         ],
+        "reinstall": [
+            "composer run migrate-rollback",
+            "composer run install"
+        ],
         "dev-server": [
             "@php artisan serve --host=0.0.0.0:8000"
         ],

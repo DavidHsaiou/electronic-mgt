@@ -9,3 +9,4 @@ class SellChannel extends Model
 {
     use HasFactory;
 }
+

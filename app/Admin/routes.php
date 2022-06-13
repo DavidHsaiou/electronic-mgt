@@ -17,4 +17,8 @@ Route::group([
     $router->resource('eletronics', ElectronicController::class);
     $router->resource('stock-in-records', StockInController::class);
     $router->resource('bill-types', BillTypeController::class);
+    $router->resource('stock-out-types', StockOutTypeController::class);
+    $router->resource('sell-channels', SellChannelController::class);
+    $router->resource('shipping-types', ShippingTypeController::class);
+    $router->resource('stock-out-records', StockOutRecordController::class);
 });

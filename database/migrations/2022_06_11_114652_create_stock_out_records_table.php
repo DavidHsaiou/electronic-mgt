@@ -16,22 +16,24 @@ class CreateStockOutRecordsTable extends Migration
         Schema::create('stock_out_records', function (Blueprint $table) {
             $table->id();
             $table->string('order_number', 32);
-            $table->bigInteger('transaction_type')->unsigned();
+            $table->bigInteger('shipping_type')->unsigned();
             $table->bigInteger('bill_type')->unsigned();
             $table->bigInteger('stock_out_type')->unsigned();
             $table->bigInteger('sell_channel_type')->unsigned();
             $table->timestamp('order_date_time')->default(date('Y-m-d H:i:s'));
             $table->timestamp('shipping_date_time')->default(date('Y-m-d H:i:s'));
             $table->string('address', '512')->default('')->nullable();
+            $table->decimal('real_amount', 19, 6);
+            $table->decimal('buyer_amount', 19, 6);
             $table->decimal('delivery_charge', 19, 6);
             $table->decimal('discount_amount', 19, 6);
             $table->text('memo');
             $table->timestamps();
 
             // foreign
-            $table->foreign('transaction_type')
+            $table->foreign('shipping_type')
                 ->references('id')
-                ->on('transaction_types')
+                ->on('shipping_types')
                 ->onDelete('cascade');
             $table->foreign('bill_type')
                 ->references('id')

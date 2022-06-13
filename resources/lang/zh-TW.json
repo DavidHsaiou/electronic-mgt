@@ -26,5 +26,21 @@
     "totalPrice": "係數總價",
     "StockInRecordDetail": "入庫明細",
     "StockInRecord": "入庫紀錄",
-    "billType ": "發票類型"
+    "billType": "發票類型",
+    "Order number": "訂單編號",
+    "Shipping type": "物流類型",
+    "Bill type": "發票類型",
+    "Stock out type": "出庫類型",
+    "Sell channel type": "通路類型",
+    "Order date time": "訂單時間",
+    "Shipping date time": "出貨時間",
+    "Address": "地址",
+    "Real amount": "實收金額",
+    "Buyer amount": "買家支付金額",
+    "Delivery charge": "運費",
+    "Discount amount": "折扣",
+    "Memo": "備註",
+    "StockOutType": "出庫類型",
+    "SellChannel": "通路類型",
+    "shippingType": "物流類型"
 }
