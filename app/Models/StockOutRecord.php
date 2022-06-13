@@ -10,6 +10,10 @@ class StockOutRecord extends Model
 {
     use HasFactory;
 
+    public function Details() {
+        return $this->hasMany(StockOutRecordDetail::class, 'record_id');
+    }
+
     public function ShippingType(): BelongsTo
     {
         return $this->belongsTo(shippingType::class, 'shipping_type');

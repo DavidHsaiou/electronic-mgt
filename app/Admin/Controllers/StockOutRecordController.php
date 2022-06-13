@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\billType;
+use App\Models\eletronic;
 use App\Models\SellChannel;
 use App\Models\shippingType;
 use App\Models\StockOutRecord;
@@ -98,24 +99,39 @@ class StockOutRecordController extends AdminController
     {
         $form = new Form(new StockOutRecord());
 
-        $form->text('order_number', __('Order number'));
-        $form->select('shipping_type', __('Shipping type'))
-            ->options(shippingType::where('status', 1)->get()->pluck('name', 'id'));
-        $form->select('bill_type', __('Bill type'))
-            ->options(billType::where('status', 1)->get()->pluck('name', 'id'));
-        $form->select('stock_out_type', __('Stock out type'))
-            ->options(StockOutType::where('status', 1)->get()->pluck('name', 'id'));
-        $form->select('sell_channel_type', __('Sell channel type'))
-            ->options(SellChannel::where('status', 1)->get()->pluck('name', 'id'));
-        $form->datetime('order_date_time', __('Order date time'))->default(date('Y-m-d H:i:s'));
-        $form->datetime('shipping_date_time', __('Shipping date time'))->default(date('Y-m-d H:i:s'));
-        $form->text('address', __('Address'));
-        $form->decimal('real_amount', __('Real amount'));
-        $form->decimal('buyer_amount', __('Buyer amount'));
-        $form->decimal('delivery_charge', __('Delivery charge'));
-        $form->decimal('discount_amount', __('Discount amount'));
-        $form->textarea('memo', __('Memo'));
+        $form->column(1/2, function ($form) {
+            $form->text('order_number', __('Order number'));
+            $form->select('bill_type', __('Bill type'))
+                ->options(billType::where('status', 1)->get()->pluck('name', 'id'));
+            $form->select('stock_out_type', __('Stock out type'))
+                ->options(StockOutType::where('status', 1)->get()->pluck('name', 'id'));
+            $form->select('sell_channel_type', __('Sell channel type'))
+                ->options(SellChannel::where('status', 1)->get()->pluck('name', 'id'));
+            $form->select('shipping_type', __('Shipping type'))
+                ->options(shippingType::where('status', 1)->get()->pluck('name', 'id'));
+            $form->text('address', __('Address'));
 
+        });
+
+        $form->column(1/2 , function ($form) {
+            $form->datetime('order_date_time', __('Order date time'))->default(date('Y-m-d H:i:s'));
+            $form->datetime('shipping_date_time', __('Shipping date time'))->default(date('Y-m-d H:i:s'));
+            $form->decimal('real_amount', __('Real amount'));
+            $form->decimal('buyer_amount', __('Buyer amount'));
+            $form->decimal('delivery_charge', __('Delivery charge'));
+            $form->decimal('discount_amount', __('Discount amount'));
+        });
+
+        $form->column(13 , function ($form) {
+            $form->hasMany('Details', __('StockOutRecordDetail'), function (Form\NestedForm $form) {
+                $form->select('electric_id', __('electronic_name'))
+                    ->options(eletronic::all()->pluck('name', 'id'))->required();
+                $form->decimal('single_price', __('single_price'))
+                    ->required();
+                $form->number('count', __('Count'))->rules(['required','gt:0']);
+            });
+            $form->textarea('memo', __('Memo'));
+        });
         return $form;
     }
 }

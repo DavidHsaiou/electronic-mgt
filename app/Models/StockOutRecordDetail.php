@@ -9,6 +9,8 @@ class StockOutRecordDetail extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['electric_id', 'single_price', 'count'];
+
     public function mainRecord() {
         return $this->belongsTo(StockOutRecord::class, 'record_id');
     }
