@@ -149,11 +149,14 @@ class StockInController extends AdminController
                         $oldDetail = StockInRecordDetail::find($newDetail['id']);
                         $nowCount = $electronic->count;
                         $oldRecordCount = $oldDetail? $oldDetail->count: 0;
-                        $newRecordCount = $newDetail['count'];
+                        $newRecordCount = intval($newDetail['count']);
                         // remove data, minus all
                         if ($newDetail['_remove_'] == 1) {
                             if ($oldRecordCount > $nowCount) {
                                 throw new Exception("{$electronic->name}現有數量小於移除數量");
+                            }
+                            if ($oldDetail->used_count > 0) {
+                                throw new Exception("{$electronic->name}已經有出庫紀錄，不得移除 出庫數量:$electronic->used_count");
                             }
                             $electronic->decrement('count', $oldRecordCount);
                         } else if ($newDetail['id'] == null) {
@@ -164,11 +167,22 @@ class StockInController extends AdminController
                             $diffCount = $newRecordCount - $oldRecordCount;
                             if ($diffCount > 0) {
                                 $electronic->increment('count', $diffCount);
+                                if ($oldDetail->status == 1) {
+                                    $oldDetail->status = 0;
+                                    $oldDetail->save();
+                                }
                             } else if ($diffCount < 0) {
                                 if (abs($diffCount) > $nowCount) {
                                     throw new Exception("{$electronic->name}現有數量小於移除數量");
                                 }
+                                if(abs($diffCount) > $oldDetail->count - $oldDetail->used_count) {
+                                    throw new Exception("{$electronic->name}該入庫紀錄已經標記出庫，總數量:{$oldDetail->count}、出庫數量:$oldDetail->used_count");
+                                }
                                 $electronic->decrement('count', abs($diffCount));
+                                if ($oldDetail->count - abs($diffCount == $oldDetail->used_count)) {
+                                    $oldDetail->status = 1;
+                                    $oldDetail->save();
+                                }
                             }
                         }
                     }

@@ -6,6 +6,7 @@ use App\Models\BillType;
 use App\Models\eletronic;
 use App\Models\SellChannel;
 use App\Models\shippingType;
+use App\Models\StockInRecordDetail;
 use App\Models\StockOutRecord;
 use App\Models\StockOutRecordDetail;
 use App\Models\StockOutType;
@@ -29,6 +30,71 @@ class StockOutRecordController extends AdminController
     protected $title = 'StockOutRecord';
     function __construct() {
         $this->title = __($this->title);
+    }
+
+    /**
+     * @param $electronic
+     * @param $diffCount
+     * @return void
+     */
+    function rollbackUsed($electronic, $diffCount): void
+    {
+        $stockInRecordDetails = StockInRecordDetail::where('electric_id', $electronic->id)
+            ->where('used_count', '>', 0)
+            ->orderByDesc('id')->get();
+        $needCount = abs($diffCount);
+        foreach ($stockInRecordDetails as $detail) {
+            $thisCount = $detail->used_count;
+            if ($detail->status == 1) {
+                $detail->status = 0;
+            }
+            if ($thisCount > $needCount) {
+                $detail->decrement('used_count', $needCount);
+                $detail->save();
+                break;
+            } else if ($thisCount == $needCount) {
+                $detail->decrement('used_count', $needCount);
+                $detail->save();
+                break;
+            } else if ($thisCount < $needCount) {
+                $detail->used_count = 0;
+                $needCount -= $thisCount;
+            }
+            $detail->save();
+        }
+    }
+
+    /**
+     * @param $electronic
+     * @param $useCount
+     * @return mixed
+     */
+    function saveUseCount($electronic, $useCount)
+    {
+        $stockInRecordDetails = StockInRecordDetail::where('electric_id', $electronic->id)
+            ->where('status', 0)
+            ->orderBy('id')->get();
+        foreach ($stockInRecordDetails as $detail) {
+            Log::notice('foreach stockin detail', [$detail, $useCount]);
+            $remainCount = $detail->count - $detail->used_count;
+            if ($useCount < $remainCount) {
+                $detail->increment('used_count', $useCount);
+                $detail->save();
+                break;
+            } else if ($useCount == $remainCount) {
+                Log::notice('ran here', [$detail]);
+                $detail->used_count = $detail->count;
+                $detail->status = 1;
+                $detail->save();
+                break;
+            } else if ($useCount > $remainCount) {
+                $useCount -= $remainCount;
+                $detail->used_count = $detail->count;
+                $detail->status = 1;
+            }
+            $detail->save();
+        }
+        return $useCount;
     }
 
     /**
@@ -187,16 +253,18 @@ class StockOutRecordController extends AdminController
                         $oldDetail = StockOutRecordDetail::find($newDetail['id']);
                         $nowCount = $electronic->count;
                         $oldRecordCount = $oldDetail? $oldDetail->count: 0;
-                        $newRecordCount = $newDetail['count'];
+                        $newRecordCount = intval($newDetail['count']);
                         // remove data, add all
                         if ($newDetail['_remove_'] == 1) {
                             $electronic->increment('count', $oldRecordCount);
+                            $this->rollbackUsed($electronic, $oldRecordCount);
                         } else if ($newDetail['id'] == null) {
                             // newData, check count and minus
                             if ($newRecordCount > $nowCount) {
                                 throw new Exception("{$electronic->name}現有數量小於使用數量");
                             }
                             $electronic->decrement('count', $newRecordCount);
+                            $this->saveUseCount($electronic, $newRecordCount);
                         } else {
                             // edit, compare count and add/minus count
                             $diffCount = $newRecordCount - $oldRecordCount;
@@ -205,8 +273,10 @@ class StockOutRecordController extends AdminController
                                     throw new Exception("{$electronic->name}現有數量小於使用數量");
                                 }
                                 $electronic->decrement('count', $diffCount);
+                                $this->saveUseCount($electronic, $diffCount);
                             } else if ($diffCount < 0) {
                                 $electronic->increment('count', abs($diffCount));
+                                $this->rollbackUsed($electronic, $diffCount);
                             }
                         }
                     }
@@ -221,11 +291,12 @@ class StockOutRecordController extends AdminController
                     foreach ($newDetails as $newDetail) {
                         $electronic = eletronic::find($newDetail["electric_id"]);
                         $nowCount = $electronic->count;
-                        $useCount = $newDetail['count'];
+                        $useCount = intval($newDetail['count']);
                         if ($useCount > $nowCount) {
                             throw new Exception("{$electronic->name}現有數量小於使用數量");
                         }
                         $electronic->decrement('count', $useCount);
+                        $this->saveUseCount($electronic, $useCount);
                     }
                 });
             });
