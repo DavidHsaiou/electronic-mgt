@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\SellChannel;
-use App\Models\shippingType;
+use App\Models\ShippingType;
 use App\Models\StockOutType;
 use App\Models\WorkState;
 use Illuminate\Database\Seeder;

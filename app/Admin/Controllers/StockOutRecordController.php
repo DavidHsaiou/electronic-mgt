@@ -5,7 +5,7 @@ namespace App\Admin\Controllers;
 use App\Models\BillType;
 use App\Models\eletronic;
 use App\Models\SellChannel;
-use App\Models\shippingType;
+use App\Models\ShippingType;
 use App\Models\StockInRecordDetail;
 use App\Models\StockOutRecord;
 use App\Models\StockOutRecordDetail;
@@ -223,7 +223,7 @@ class StockOutRecordController extends AdminController
                 ->options(SellChannel::where('status', 1)->get()->pluck('name', 'id'))
                 ->required();
             $form->select('shipping_type', __('Shipping type'))
-                ->options(shippingType::where('status', 1)->get()->pluck('name', 'id'))
+                ->options(ShippingType::where('status', 1)->get()->pluck('name', 'id'))
                 ->required();
             $form->text('address', __('Address'));
 

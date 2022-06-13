@@ -16,7 +16,7 @@ class StockOutRecord extends Model
 
     public function ShippingType(): BelongsTo
     {
-        return $this->belongsTo(shippingType::class, 'shipping_type');
+        return $this->belongsTo(ShippingType::class, 'shipping_type');
     }
 
     public function BillType(): BelongsTo
