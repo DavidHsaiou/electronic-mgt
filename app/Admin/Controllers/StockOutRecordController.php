@@ -114,6 +114,8 @@ class StockOutRecordController extends AdminController
             $actions->disableView();
         });
 
+        $grid->model()->orderBy('id', 'desc');
+
         $grid->column('id', __('Id'))->expand(function ($model){
             $details = $model->Details()
                 ->get()
@@ -235,7 +237,7 @@ class StockOutRecordController extends AdminController
         $form->column(13 , function ($form) {
             $form->hasMany('Details', __('StockOutRecordDetail'), function (Form\NestedForm $form) {
                 $form->select('electric_id', __('electronic_name'))
-                    ->options(eletronic::all()->pluck('name', 'id'))->required();
+                    ->options(eletronic::where('count', '>', 0)->get()->pluck('name', 'id'))->required();
                 $form->decimal('single_price', __('single_price'))
                     ->required();
                 $form->number('count', __('Count'))->rules(['required','gt:0']);

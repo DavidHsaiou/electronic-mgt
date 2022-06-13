@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\eletronic;
+use App\Models\StockInRecordDetail;
 use App\Models\StorageArea;
 use App\Models\WorkState;
 use App\Utility\TimeUtility;
@@ -10,6 +11,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Support\Facades\Log;
 
 class ElectronicController extends AdminController
 {
@@ -64,6 +66,27 @@ class ElectronicController extends AdminController
         $grid->column('image_path', __('upload_image'))->image();
         $grid->column('essential_name', __('essential_name'));
         $grid->column('pricing', __('pricing'));
+        $grid->column('profit', __('profit'))->display(function (){
+            $price = $this['pricing'];
+            if ($price == 0) {
+                return "-";
+            }
+
+            $electronic_id = $this['id'];
+
+            $totalCount = 0;
+            $totalPrice = 0;
+            $remainRecords = StockInRecordDetail::where('electric_id', $electronic_id)
+                ->where('status', 0)->get();
+            if (count($remainRecords) == 0) { return '-'; }
+            foreach ($remainRecords as $remainRecord) {
+                $price_coefficient = $remainRecord->mainRecord()->first()->price_coefficient;
+                $remainCount = $remainRecord->count - $remainRecord->used_count;
+                $totalCount += $remainCount;
+                $totalPrice += $remainCount * $remainRecord->original_price * $price_coefficient;
+            }
+            return ($price / ($totalPrice / $totalCount) * 100).'%';
+        });
         $grid->column('created_at', __('Created at'))->display(function ($create){
             return TimeUtility::toDisplyTime($create);
         });

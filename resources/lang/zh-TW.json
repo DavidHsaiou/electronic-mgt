@@ -47,5 +47,6 @@
     "SellChannel": "通路類型",
     "shippingType": "物流類型",
     "StockOutRecord": "出庫管理",
-    "StockOutRecordDetail": "出庫明細"
+    "StockOutRecordDetail": "出庫明細",
+    "profit": "利潤"
 }
