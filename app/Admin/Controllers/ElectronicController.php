@@ -12,6 +12,7 @@ use App\Utility\TimeUtility;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Encore\Admin\Grid\Filter;
 use Encore\Admin\Show;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -48,7 +49,7 @@ class ElectronicController extends AdminController
 
         $grid->filter(function ($filter) {
             $filter->disableIdFilter();
-            $filter->column(1/2, function ($filter) {
+            $filter->column(1/2, function (Filter $filter) {
                 $filter->like('name', __('Name'));
                 $filter->like('description', __('description'));
                 $filter->where(function ($query) {
@@ -68,7 +69,7 @@ class ElectronicController extends AdminController
         $grid->column('name', __('Name'));
         $grid->column('options', __('options'));
         $grid->column('count', __('Count'));
-        $grid->column('ElectronicType.name', __('ElectronicType'));
+        $grid->column('ElectronicType.TypeName', __('ElectronicType'));
         $grid->WorkState(__('flowTag'))
             ->display(function ($workState) {
                 $returnData = array_map(function ($workState) {
@@ -158,7 +159,7 @@ class ElectronicController extends AdminController
         $form->select('electronic_type', __('ElectronicType'))
             ->options(ElectronicType::where('status', 1)
                 ->orderBy('sort')
-                ->pluck('name', 'id'))
+                ->pluck('TypeName', 'id'))
             ->required();
         $form->multipleSelect('StorageArea', __('store location'))
             ->options(DB::table('storage_areas', 'sa')

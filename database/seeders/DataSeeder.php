@@ -45,12 +45,12 @@ class DataSeeder extends Seeder {
             'status' => 1
         ]);
         ElectronicType::create([
-            'name' => '電容',
+            'TypeName' => '電容',
             'status' => 1,
             "sort" => 0,
         ]);
         ElectronicType::create([
-            'name' => '電阻',
+            'TypeName' => '電阻',
             'status' => 1,
             "sort" => 1
         ]);

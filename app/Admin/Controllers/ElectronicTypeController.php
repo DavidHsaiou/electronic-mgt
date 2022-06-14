@@ -32,7 +32,7 @@ class ElectronicTypeController extends AdminController
         $grid->model()->orderBy('sort');
 
         $grid->column('id', __('Id'));
-        $grid->column('name', __('Name'));
+        $grid->column('TypeName', __('Name'));
         $grid->column('status', __('Status'))->bool();
         $grid->column('sort', __('Sort'));
         $grid->column('created_at', __('Created at'));
@@ -52,7 +52,7 @@ class ElectronicTypeController extends AdminController
         $show = new Show(ElectronicType::findOrFail($id));
 
         $show->field('id', __('Id'));
-        $show->field('name', __('Name'));
+        $show->field('TypeName', __('Name'));
         $show->field('status', __('Status'));
         $show->field('sort', __('Sort'));
         $show->field('created_at', __('Created at'));
@@ -70,7 +70,7 @@ class ElectronicTypeController extends AdminController
     {
         $form = new Form(new ElectronicType());
 
-        $form->text('name', __('Name'));
+        $form->text('TypeName', __('Name'));
         $form->switch('status', __('Status'));
         $form->number('sort', __('Sort'));
 

@@ -15,7 +15,7 @@ class CreateElectronicTypesTable extends Migration
     {
         Schema::create('electronic_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 32);
+            $table->string('TypeName', 32);
             $table->tinyInteger('status');
             $table->smallInteger('sort')->unsigned();
             $table->timestamps();
