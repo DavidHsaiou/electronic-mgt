@@ -143,7 +143,7 @@ class StockOutRecordController extends AdminController
             return new Table([
                 __('electronic_name'),
                 __('store location'),
-                __('singlePrice'),
+                __('single_price'),
                 __('count'),
                 __('total_price')],
                 $details->toArray());
