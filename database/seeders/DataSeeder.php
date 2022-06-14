@@ -6,6 +6,7 @@ use App\Models\ElectronicType;
 use App\Models\SellChannel;
 use App\Models\ShippingType;
 use App\Models\StockOutType;
+use App\Models\SupplyManagement;
 use App\Models\WorkState;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -53,6 +54,10 @@ class DataSeeder extends Seeder {
             'TypeName' => '電阻',
             'status' => 1,
             "sort" => 1
+        ]);
+        SupplyManagement::create([
+            'supply_name' => '測試用供應商',
+            'status' => 1,
         ]);
     }
 }

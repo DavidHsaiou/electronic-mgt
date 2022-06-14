@@ -52,5 +52,16 @@
     "ElectronicType": "料表類型",
     "Sort": "排序",
     "id_name": "料號",
-    "short_name": "簡稱"
+    "short_name": "簡稱",
+    "Supply name": "供應商名稱",
+    "SupplyMerchant": "供應商",
+    "Purchase time": "採購日期",
+    "Original amount": "原幣別採購金額(a)",
+    "Original delivery charge": "原幣別當地運費",
+    "taiwan delivery charge": "台幣運費(b)",
+    "taiwan tariff": "台幣關稅(c)",
+    "taiwan miscellaneous branch": "台幣雜支(d)",
+    "taiwan charge": "採購台幣支出(e)",
+    "PurchaseOrder": "採購單",
+    "price_coefficient_math": "(b+c+d+e/a)"
 }

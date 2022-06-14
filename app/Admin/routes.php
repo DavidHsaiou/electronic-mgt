@@ -23,4 +23,6 @@ Route::group([
     $router->resource('stock-out-records', StockOutRecordController::class);
     $router->resource('work-states', WorkStateController::class);
     $router->resource('electronic-types', ElectronicTypeController::class);
+    $router->resource('supply-managements', SupplyManagementController::class);
+    $router->resource('purchase-orders', PurchaseOrderController::class);
 });

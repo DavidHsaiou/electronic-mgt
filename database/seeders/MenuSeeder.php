@@ -16,6 +16,11 @@ class MenuSeeder extends Seeder
     public function run()
     {
         DB::table('admin_menu')->insert([
+            'title' => '採購單管理',
+            'uri' => '/purchase-orders',
+            'icon' => 'fa-tasks'
+        ]);
+        DB::table('admin_menu')->insert([
             'title' => '入庫管理',
             'uri' => '/stock-in-records',
             'icon' => 'fa-tasks'
@@ -28,6 +33,11 @@ class MenuSeeder extends Seeder
         DB::table('admin_menu')->insert([
             'title' => '出庫管理',
             'uri' => '/stock-out-records',
+            'icon' => 'fa-tasks'
+        ]);
+        DB::table('admin_menu')->insert([
+            'title' => '供應商管理',
+            'uri' => '/supply-managements',
             'icon' => 'fa-tasks'
         ]);
         DB::table('admin_menu')->insert([

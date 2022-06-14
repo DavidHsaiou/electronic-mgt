@@ -12,4 +12,8 @@ class StockInRecord extends Model
     public function details() {
         return $this->hasMany(StockInRecordDetail::class, 'record_id');
     }
+
+    public function PurchaseOrder() {
+        return $this->belongsTo(PurchaseOrder::class, 'purchase_id');
+    }
 }

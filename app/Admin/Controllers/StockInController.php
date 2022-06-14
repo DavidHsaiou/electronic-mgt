@@ -3,8 +3,10 @@
 namespace App\Admin\Controllers;
 
 use App\Models\eletronic;
+use App\Models\PurchaseOrder;
 use App\Models\StockInRecord;
 use App\Models\StockInRecordDetail;
+use App\Utility\NumberUtility;
 use App\Utility\TimeUtility;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -71,7 +73,14 @@ class StockInController extends AdminController
                 __('totalPrice')],
                 $details->toArray());
         });
-        $grid->column('price_coefficient', __('price_coefficient'));
+        $grid->column('PurchaseOrder', __('PurchaseOrder'))->display(function () {
+            $order = $this->PurchaseOrder()
+                ->first();
+            return $order->SupplyMerchant()->first()->supply_name.'-'.$order->purchase_time;
+        });
+        $grid->column('price_coefficient', __('price_coefficient'))->display(function ($data) {
+            return NumberUtility::toDisplyFloat($data);
+        });
         $grid->column('details',__('totalPrice'))->display(function ($details) use(&$price_coefficient) {
             $eachPrice = 0;
             $price_coefficient = 0;
@@ -127,8 +136,18 @@ class StockInController extends AdminController
             $tools->disableView();
         });
 
-        $form->decimal('price_coefficient', __('price_coefficient'))->required();
+        $form->select('purchase_id', __('PurchaseOrder'))
+            ->options(PurchaseOrder::where('status', 1)->get()
+                ->map(function (PurchaseOrder $item, $key) {
+                    return [
+                        'purchase_name' => $item->SupplyMerchant()->first()->supply_name.'-'.$item->purchase_time,
+                        'id' => $item->id
+                    ];
+                })
+                ->pluck('purchase_name', 'id'))
+            ->required();
 
+        $form->hidden('price_coefficient');
         $form->hasMany('details', __('StockInRecordDetail'), function (Form\NestedForm $form) {
             $form->select('electric_id', __('electronic_name'))
                 ->options(eletronic::all()->pluck('name', 'id'))->required();
@@ -140,7 +159,10 @@ class StockInController extends AdminController
         if ($form->isEditing()) {
             $form->saving(function (Form $form) {
                 Log::notice('edit started');
+                $order = PurchaseOrder::where('id', $form->purchase_id)->first();
+                $form->price_coefficient = PurchaseOrderController::getPriceCoefficient($order);
                 $newDetails = $form->details;
+                if (is_null($newDetails) || count($newDetails) == 0) return;
                 // when not enough count popup
                 DB::transaction(function () use(&$newDetails) {
                     foreach ($newDetails as $newDetail) {
@@ -191,6 +213,11 @@ class StockInController extends AdminController
         }
 
         if ($form->isCreating()) {
+            $form->saving(function (Form $form) {
+                $order = PurchaseOrder::where('id', $form->purchase_id)->first();
+                $form->price_coefficient = PurchaseOrderController::getPriceCoefficient($order);
+            });
+
             $form->saved(function (Form $form) {
                 $details = $form->model()->details()->get();
                 foreach ($details as $detail) {
