@@ -126,15 +126,23 @@ class StockOutRecordController extends AdminController
                 ->map(function ($detail){
                     $detail->singlePrice = NumberUtility::toDisplyFloat($detail->single_price);
                     $detail->totalPrice = NumberUtility::toDisplyFloat($detail->single_price * $detail->count);
-                    $detail->electronic_name = $detail->useElectronic()->first()->name;
+                    $electronic = $detail->useElectronic()->first();
+                    $detail->electronic_name = $electronic->name;
+                    $detail->storageAreas = implode(',',
+                        $electronic->StorageArea()->get()
+                            ->map(function ($item) {
+                                return $item['name'];
+                            })->all());
                     return $detail->only([
                         'electronic_name',
+                        'storageAreas',
                         'singlePrice',
                         'count',
                         'totalPrice']);
                 });
             return new Table([
                 __('electronic_name'),
+                __('store location'),
                 __('singlePrice'),
                 __('count'),
                 __('total_price')],

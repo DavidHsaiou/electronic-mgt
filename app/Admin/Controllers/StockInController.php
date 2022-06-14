@@ -86,9 +86,16 @@ class StockInController extends AdminController
                 ->map(function ($detail){
                     $detail->singlePrice = $detail->original_price * $detail->mainRecord()->first()->price_coefficient;
                     $detail->totalPrice = $detail->singlePrice * $detail->count;
-                    $detail->electronic_name = $detail->useElectronic()->first()->name;
+                    $electronic = $detail->useElectronic()->first();
+                    $detail->electronic_name = $electronic->name;
+                    $detail->storageAreas = implode(',',
+                        $electronic->StorageArea()->get()
+                            ->map(function ($item) {
+                                return $item['name'];
+                            })->all());
                     return $detail->only([
                         'electronic_name',
+                        'storageAreas',
                         'original_price',
                         'singlePrice',
                         'count',
@@ -96,6 +103,7 @@ class StockInController extends AdminController
                 });
             return new Table([
                 __('electronic_name'),
+                __('store location'),
                 __('original_price'),
                 __('singlePrice'),
                 __('Count'),
