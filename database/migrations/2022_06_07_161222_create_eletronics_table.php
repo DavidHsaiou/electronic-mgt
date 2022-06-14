@@ -16,6 +16,7 @@ class CreateEletronicsTable extends Migration
     {
         Schema::create('eletronics', function (Blueprint $table) {
             $table->id();
+            $table->string('id_name', 32);
             $table->string('name', 128);
             $table->integer('count')->default(0);
             $table->string('description', 512);

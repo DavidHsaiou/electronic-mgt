@@ -50,5 +50,6 @@
     "StockOutRecordDetail": "出庫明細",
     "profit": "利潤",
     "ElectronicType": "料表類型",
-    "Sort": "排序"
+    "Sort": "排序",
+    "id_name": "料號"
 }

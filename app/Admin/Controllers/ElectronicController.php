@@ -71,6 +71,7 @@ class ElectronicController extends AdminController
             ->orderBy('et.sort');
 
         $grid->column('id', __('Id'));
+        $grid->column('id_name', __('id_name'))->sortable();
         $grid->column('name', __('Name'));
         $grid->column('options', __('options'));
         $grid->column('count', __('Count'));
@@ -157,6 +158,8 @@ class ElectronicController extends AdminController
         });
 
         $form->text('name', __('Name'))
+            ->required();
+        $form->text('id_name', __('id_name'))
             ->required();
         $form->text('options', __('options'));
         $form->textarea('description', __('description'))
