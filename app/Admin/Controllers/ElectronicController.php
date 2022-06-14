@@ -57,6 +57,11 @@ class ElectronicController extends AdminController
                         $query->where('id', "$this->input");
                     });
                 }, __('flowTag'))->select(WorkState::where('status', 1)->get()->pluck('name', 'id'));
+                $filter->where(function ($query) {
+                    $query->whereHas('ElectronicType', function ($query) {
+                        $query->where('id', "$this->input");
+                    });
+                }, __('ElectronicType'))->select(ElectronicType::where('status', 1)->get()->pluck('TypeName', 'id'));
             });
         });
 
