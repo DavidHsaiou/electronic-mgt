@@ -150,7 +150,15 @@ class StockInController extends AdminController
         $form->hidden('price_coefficient');
         $form->hasMany('details', __('StockInRecordDetail'), function (Form\NestedForm $form) {
             $form->select('electric_id', __('electronic_name'))
-                ->options(eletronic::all()->pluck('name', 'id'))->required();
+                ->options(eletronic::all()
+                    ->map(function ($item) {
+                        return [
+                            'name' => $item->GetSelectName(),
+                            'id' => $item->id
+                        ];
+                    })
+                    ->pluck('name', 'id'))
+                ->required();
             $form->decimal('original_price', __('original_price'))
                 ->required();
             $form->number('count', __('Count'))->rules(['required','gt:0']);

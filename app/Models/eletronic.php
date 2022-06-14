@@ -29,4 +29,12 @@ class eletronic extends Model
     {
         return $this->belongsTo(ElectronicType::class, 'electronic_type');
     }
+
+    public function GetSelectName() {
+        $options = '';
+        if ($this->options != '') {
+            $options = '-'.$this->options;
+        }
+        return $this->id_name.$options.'-'.$this->name;
+    }
 }
