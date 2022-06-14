@@ -18,6 +18,7 @@ class CreateEletronicsTable extends Migration
             $table->id();
             $table->string('id_name', 32);
             $table->string('name', 128);
+            $table->string('short_name', 128);
             $table->integer('count')->default(0);
             $table->string('description', 512);
             $table->string('essential_name', 128)->default('')->nullable();

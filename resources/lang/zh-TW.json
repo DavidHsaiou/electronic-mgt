@@ -51,5 +51,6 @@
     "profit": "利潤",
     "ElectronicType": "料表類型",
     "Sort": "排序",
-    "id_name": "料號"
+    "id_name": "料號",
+    "short_name": "簡稱"
 }

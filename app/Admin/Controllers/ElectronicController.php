@@ -63,6 +63,10 @@ class ElectronicController extends AdminController
                     });
                 }, __('ElectronicType'))->select(ElectronicType::where('status', 1)->get()->pluck('TypeName', 'id'));
             });
+
+            $filter->column(1/2, function (Filter $filter) {
+                $filter->like('id_name', __('id_name'));
+            });
         });
 
         $grid->model()
@@ -75,6 +79,7 @@ class ElectronicController extends AdminController
         $grid->column('name', __('Name'))->modal(__('memo'), function ($model) {
             return "{$model->memo}<\br>";
         });
+        $grid->column('short_name', __('short_name'));
         $grid->column('options', __('options'));
         $grid->column('count', __('Count'));
         $grid->column('ElectronicType.TypeName', __('ElectronicType'));
@@ -160,8 +165,10 @@ class ElectronicController extends AdminController
         });
 
         $form->text('name', __('Name'))
-            ->required();
+            ->rules(['required', 'max:60']);
         $form->text('id_name', __('id_name'))
+            ->required();
+        $form->text('short_name', __('short_name'))
             ->required();
         $form->text('options', __('options'));
         $form->textarea('description', __('description'))
