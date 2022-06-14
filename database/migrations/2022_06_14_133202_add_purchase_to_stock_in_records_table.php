@@ -33,6 +33,7 @@ class AddPurchaseToStockInRecordsTable extends Migration
     public function down()
     {
         Schema::table('stock_in_records', function (Blueprint $table) {
+            $table->dropForeign('stock_in_records_purchase_id_foreign');
             $table->dropColumn('purchase_id');
         });
     }

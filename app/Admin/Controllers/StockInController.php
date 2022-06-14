@@ -18,6 +18,9 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * @property $input
+ */
 class StockInController extends AdminController
 {
     /**
@@ -41,6 +44,32 @@ class StockInController extends AdminController
         $grid = new Grid(new StockInRecord());
         $grid->filter(function ($filter) {
             $filter->disableIdFilter();
+            $filter->where(function ($query) {
+                $query->whereHas('PurchaseOrder', function ($query) {
+                    $query->where('id', "$this->input");
+                });
+            }, __('PurchaseOrder'))->select(PurchaseOrder::where('status', 1)
+                ->get()
+                ->map(function ($item) {
+                    return [
+                        'name' => $item->SupplyMerchant()->first()->supply_name.'-'.$item->purchase_time,
+                        'id' => $item->id
+                    ];
+                })->pluck('name', 'id')
+            );
+
+            $filter->where(function ($query) {
+                $query->whereHas('details', function ($query) {
+                    $query->where('electric_id', "$this->input");
+                });
+            }, __('electronic_name'))->select(eletronic::all()
+                ->map(function ($item) {
+                    return [
+                        'name' => $item->GetSelectName(),
+                        'id' => $item->id
+                    ];
+                })->pluck('name', 'id')
+            );
         });
 
         $grid->actions(function ($actions) {
@@ -163,6 +192,8 @@ class StockInController extends AdminController
                 ->required();
             $form->number('count', __('Count'))->rules(['required','gt:0']);
         });
+
+        $form->textarea('memo', __('memo'));
 
         if ($form->isEditing()) {
             $form->saving(function (Form $form) {

@@ -16,6 +16,7 @@ class CreateStockInRecordsTable extends Migration
         Schema::create('stock_in_records', function (Blueprint $table) {
             $table->id();
             $table->decimal('price_coefficient', 19, 6);
+            $table->text('memo')->default('')->nullable();
             $table->timestamps();
         });
     }
