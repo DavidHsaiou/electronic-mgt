@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\ElectronicType;
+use App\Utility\TimeUtility;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -35,8 +36,12 @@ class ElectronicTypeController extends AdminController
         $grid->column('TypeName', __('Name'));
         $grid->column('status', __('Status'))->bool();
         $grid->column('sort', __('Sort'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('created_at', __('Created at'))->display(function ($create){
+            return TimeUtility::toDisplyTime($create);
+        });
+        $grid->column('updated_at', __('Updated at'))->display(function ($create){
+            return TimeUtility::toDisplyTime($create);
+        });
 
         return $grid;
     }
@@ -55,8 +60,12 @@ class ElectronicTypeController extends AdminController
         $show->field('TypeName', __('Name'));
         $show->field('status', __('Status'));
         $show->field('sort', __('Sort'));
-        $show->field('created_at', __('Created at'));
-        $show->field('updated_at', __('Updated at'));
+        $show->field('created_at', __('Created at'))->display(function ($create){
+            return TimeUtility::toDisplyTime($create);
+        });
+        $show->field('updated_at', __('Updated at'))->display(function ($create){
+            return TimeUtility::toDisplyTime($create);
+        });
 
         return $show;
     }

@@ -72,7 +72,9 @@ class ElectronicController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('id_name', __('id_name'))->sortable();
-        $grid->column('name', __('Name'));
+        $grid->column('name', __('Name'))->modal(__('memo'), function ($model) {
+            return "{$model->memo}<\br>";
+        });
         $grid->column('options', __('options'));
         $grid->column('count', __('Count'));
         $grid->column('ElectronicType.TypeName', __('ElectronicType'));
@@ -187,7 +189,7 @@ class ElectronicController extends AdminController
         $form->number('pricing', __('pricing'));
         $form->text('tax_rule', __('tax_rule'));
         $form->text('bill_name', __('bill_name'));
-        $form->textarea('memo', __('memo'));
+        $form->editor('memo');
 
         return $form;
     }
