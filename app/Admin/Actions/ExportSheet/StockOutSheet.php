@@ -19,7 +19,7 @@ class StockOutSheet extends RowAction
 
         // $model ...
         $reader = new Xlsx();
-        $spreadsheet = $reader->load(resource_path()."\\template\\stockout-template.xlsx");
+        $spreadsheet = $reader->load(resource_path()."/template/stockout-template.xlsx");
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
 
         $sheet = $spreadsheet->getActiveSheet();
@@ -47,7 +47,7 @@ class StockOutSheet extends RowAction
             $detailTotal = $detail->single_price*$detail->count;
 
             $drawing = new Drawing();
-            $imagePath = ('uploads\\'.$electronic->image_path);
+            $imagePath = ('uploads/'.$electronic->image_path);
             $drawing->setPath($imagePath);
             $drawing->setCoordinates('B'.$currentRow);
             $drawing->setWidthAndHeight(128, $height);
