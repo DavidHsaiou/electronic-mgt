@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\ExportSheet\StockOutSheet;
 use App\Models\BillType;
 use App\Models\eletronic;
 use App\Models\SellChannel;
@@ -116,6 +117,7 @@ class StockOutRecordController extends AdminController
         $grid->actions(function ($actions) {
             $actions->disableDelete();
             $actions->disableView();
+            $actions->add(new StockOutSheet());
         });
 
         $grid->model()->orderBy('id', 'desc');
