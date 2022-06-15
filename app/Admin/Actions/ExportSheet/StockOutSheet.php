@@ -87,6 +87,6 @@ class StockOutSheet extends RowAction
         $writer->save($resultPath);
         // http://127.0.0.1:8000/stockout-1.xlsx
 
-        return $this->response()->success('Success message.')->redirect(env('APP_URL').'/'.$resultPath);
+        return $this->response()->success('Success message.')->download(env('APP_URL').'/'.$resultPath);
     }
 }
