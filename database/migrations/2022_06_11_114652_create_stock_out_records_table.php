@@ -17,6 +17,7 @@ class CreateStockOutRecordsTable extends Migration
             $table->id();
             $table->string('order_number', 32);
             $table->bigInteger('shipping_type')->unsigned();
+            $table->string('shipping_order_number', 32);
             $table->bigInteger('bill_type')->unsigned();
             $table->bigInteger('stock_out_type')->unsigned();
             $table->bigInteger('sell_channel_type')->unsigned();

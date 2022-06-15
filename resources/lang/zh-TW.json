@@ -63,5 +63,6 @@
     "taiwan miscellaneous branch": "台幣雜支(d)",
     "taiwan charge": "採購台幣支出(e)",
     "PurchaseOrder": "採購單",
-    "price_coefficient_math": "(b+c+d+e/a)"
+    "price_coefficient_math": "(b+c+d+e/a)",
+    "shipping_order_number": "物流訂單編號"
 }

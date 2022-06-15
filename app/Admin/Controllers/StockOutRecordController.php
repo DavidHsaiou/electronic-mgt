@@ -152,6 +152,7 @@ class StockOutRecordController extends AdminController
         });
         $grid->column('order_number', __('Order number'));
         $grid->column('ShippingType.name', __('Shipping type'));
+        $grid->column('shipping_order_number', __('shipping_order_number'));
         $grid->column('BillType.name', __('Bill type'));
         $grid->column('StockOutType.name', __('Stock out type'));
         $grid->column('SellChannelType.name', __('Sell channel type'));
@@ -235,6 +236,7 @@ class StockOutRecordController extends AdminController
             $form->select('shipping_type', __('Shipping type'))
                 ->options(ShippingType::where('status', 1)->get()->pluck('name', 'id'))
                 ->required();
+            $form->text('shipping_order_number', __('shipping_order_number'))->required();
             $form->text('address', __('Address'));
 
         });
